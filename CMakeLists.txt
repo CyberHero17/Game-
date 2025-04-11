@@ -1,0 +1,6 @@
+cmake_minimum_required(VERSION 3.10)
+set(CMAKE_CXX_STANDARD 14)
+add_compile_options(-Wall -Wall)
+add_executable(jid main.cpp)
+find_package(SFML 2.6.1 COMPONENTS graphics audio network REQUIRED)
+target_link_libraries(jid PUBLIC sfml-system sfml-graphics sfml-window)
