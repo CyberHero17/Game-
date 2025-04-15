@@ -7,8 +7,9 @@
 
 Tear::Tear()
 {
+    this->time.restart();
     this->damage = 2;
-    this->live_time = 10;
+    this->range = 10;
     this->max_speed = 5;
     this->texture.loadFromFile("Textures/Tear.png");
     this->sprite.setTexture(this->texture);
@@ -22,8 +23,9 @@ Tear::Tear()
 
 Tear::Tear(Vector2D coord, sf::Event event)
 {
+    this->time.restart();
     this->damage = 2;
-    this->live_time = 10;
+    this->range = 3;
     this->max_speed = 5;
     this->texture.loadFromFile("Textures/Tear.png");
     this->sprite.setTexture(this->texture);
@@ -41,19 +43,22 @@ Tear::Tear(Vector2D coord, sf::Event event)
         cout << "Button wasn't pressed\n";
         velocity = {max_speed, 0};
     }
-    cout << "Tear created\n";
 
 }
 
-int Tear::turn(list<Entity> &Mosters)
+int Tear::turn(list<Zombie> &Zombies)
 {
-
     this->coord.x = this->coord.x + this->velocity.x;
     this->coord.y = this->coord.y + this->velocity.y;
-    for(auto it = Mosters.begin(); it != Mosters.end(); ++it)
+    float time_of_living = time.getElapsedTime().asSeconds();
+    if( time_of_living > this->range/this->max_speed)
     {
-                                                    //cout << it->getCoord() << endl;
-        if ( (it->getCoord() - this->getCoord()).ModuleQuadr() <= 10000 )
+        return 2; // означает что слеза пропала т.к. изжила свое время
+    }
+
+    for(auto it = Zombies.begin(); it != Zombies.end(); ++it)
+    {
+        if ( (it->getCoord() - this->getCoord()).ModuleQuadr() <= 1000 )
         {
             it->getDamage(this->damage);
             return 0; // 0 - означает, что слеза врезалась во что то и ее надо убрать в цикле в main.cpp
@@ -71,4 +76,13 @@ Vector2D Tear::getCoord()
 sf::Sprite Tear::getSprite()
 {
     return this->sprite;
-} 
+}
+
+
+std::ostream &operator<<(std::ostream &os, const Tear &t)
+{
+    os << "Tear's coodr = " << t.coord << endl;
+    os << "Tear's max_speed = " <<  t.max_speed << endl;
+    os << "Tear's velocity = " << t.velocity;
+    return os;
+}

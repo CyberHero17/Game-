@@ -5,6 +5,7 @@
 
 Zombie::Zombie(int hp, float max_speed, sf::Texture texture)
 {
+    this->name = "Zombie";
     this->acceleration = max_speed * 4;
     this->health = hp;
     this->max_speed = max_speed;
@@ -16,6 +17,7 @@ Zombie::Zombie(int hp, float max_speed, sf::Texture texture)
 
 Zombie::Zombie()
 {
+    this->name = "Zombie (default)";
     this->acceleration = 4;
     this->health = 5;
     this->max_speed = 1;
@@ -45,22 +47,25 @@ void Zombie::MoveWithoutIntertion(Player& pl)
     
 }
 
-void Zombie::turn(Player& pl)
+int Zombie::turn(Player& pl)
 {
-    MoveWithoutIntertion(pl);
-    if ( (this->coord - pl.coord).x * (this->coord - pl.coord).x + (this->coord - pl.coord).y * (this->coord - pl.coord).y < 5)
+    if(this->getHealth() <= 0)
     {
-        pl.getDamage(1);
+        return 0; // зомби умер
     }
+    else
+    {
+        MoveWithoutIntertion(pl);
+        if ( (this->coord - pl.coord).ModuleQuadr() < 110)
+        {
+            pl.getDamage(1);
+        }
+        return 1;
+    }
+
 }
 
 void Zombie::death()
 {
     cout << "Player is dead" << endl;
-}
-
-void Zombie::getDamage(int D)
-{
-    health -= D;
-    cout << "Got " << D << " damage\n";
 }

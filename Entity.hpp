@@ -2,17 +2,19 @@
 #include <iostream>
 #include "Structures.hpp"
 #include <SFML/Graphics.hpp>
+#include <string>
 
 using std::cin;
 using std::cout;
 using std::endl;
-
+using std::string;
 
 
 
 class Entity
 {
 public:
+    string name;
     float acceleration;
     int health;
     Vector2D velocity;

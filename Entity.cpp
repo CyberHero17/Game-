@@ -18,7 +18,8 @@ void Entity::turn()
 
 void Entity::getDamage(int D)
 {
-    cout << "Entity Got Dmg" << endl;
+    this->health -= D;
+    cout << this->name << " got " << D << " damage" << endl;
 }
 Vector2D Entity::getVelocity()
 {
