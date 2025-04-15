@@ -1,52 +1,36 @@
-#pragma once
-struct point // возможно не нужен
+#include "Structures.hpp"
+
+// Перегруженный оператор - сравнение двух векторов на равенство
+bool Vector2D::operator== (const Vector2D& v2) const {
+    return x == v2.x && y == v2.y;
+}
+
+// Перегруженный оператор - неравенство векторов
+bool Vector2D::operator!= (const Vector2D& v2) const {
+    return !(*this == v2);
+}
+
+// Сумма двух векторов
+Vector2D Vector2D::operator+ (const Vector2D& v2) const {
+    return Vector2D(x + v2.x, y + v2.y);
+}
+
+// Вычитание векторов
+Vector2D Vector2D::operator- (const Vector2D& v2) const {
+    return Vector2D(x - v2.x, y - v2.y);
+}
+
+// Оператор умножения вектора на скаляр
+
+Vector2D Vector2D::operator* (const float a) const {
+    return Vector2D(x * a, y * a);
+}
+
+float Vector2D::ModuleQuadr()
 {
-    float x;
-    float y;
-};
+    return x * x + y * y;
+}
 
-class Vector2D
-{
-public:
-    float x, y;
-
-    // Конструкторы
-    Vector2D() : x(0), y(0) {}
-    Vector2D(int x, int y) : x(x), y(y) {}
-    // Деструктор
-    ~Vector2D() {}
-
-
-
-
-    // Перегруженный оператор - сравнение двух векторов на равенство
-    bool operator== (const Vector2D& v2) const {
-        return x == v2.x && y == v2.y;
-    }
-
-    // Перегруженный оператор - неравенство векторов
-    bool operator!= (const Vector2D& v2) const {
-        return !(*this == v2);
-    }
-
-    // Сумма двух векторов
-    Vector2D operator+ (const Vector2D& v2) const {
-        return Vector2D(x + v2.x, y + v2.y);
-    }
-
-    // Вычитание векторов
-    Vector2D operator- (const Vector2D& v2) const {
-        return Vector2D(x - v2.x, y - v2.y);
-    }
-
-    // Оператор умножения вектора на скаляр
-
-    Vector2D operator* (const float a) const {
-        return Vector2D(x * a, y * a);
-    }
-};
-
-/*
 // Оператор умножения скаляра на вектор
 Vector2D operator* (float a, const Vector2D& v) {
    return v * a;
@@ -65,4 +49,4 @@ std::istream& operator>>(std::istream &is, Vector2D &v) {
     v.x = x;
     v.y = y;
     return is; 
-} */
+}

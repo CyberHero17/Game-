@@ -1,6 +1,6 @@
 #pragma once
 #include <iostream>
-#include "Structures.cpp"
+#include "Structures.hpp"
 #include <SFML/Graphics.hpp>
 
 using std::cin;

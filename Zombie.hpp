@@ -2,7 +2,7 @@
 
 #include <iostream>
 #include "Player.hpp"
-//#include "Structures.cpp"
+#include "Structures.hpp"
 #include <SFML/Graphics.hpp>
 #include "Entity.hpp"
 

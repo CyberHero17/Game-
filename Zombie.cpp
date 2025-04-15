@@ -1,6 +1,7 @@
 #include "Zombie.hpp"
 #include <SFML/Graphics.hpp>
 #include <math.h>
+#include "Structures.hpp"
 
 Zombie::Zombie(int hp, float max_speed, sf::Texture texture)
 {
@@ -25,28 +26,32 @@ Zombie::Zombie()
 
 void Zombie::MoveWithoutIntertion(Player& pl)
 {
+    float time = 1;
     //cout << "Zombie's turn" << endl;
     Vector2D vect_to_player = this->coord - pl.coord;
-    float Abs_vect_to_player = sqrt(vect_to_player.x * vect_to_player.x + vect_to_player.y * vect_to_player.y);
+    float Abs_vect_to_player = sqrt(vect_to_player.ModuleQuadr());
 
     //cout << "vect_to_player = " << vect_to_player.x << " " << vect_to_player.y << endl; 
-    if(Abs_vect_to_player > 1)
+    if(Abs_vect_to_player > 10)
     {
-        velocity.x = -max_speed * vect_to_player.x/Abs_vect_to_player;
-        velocity.y = -max_speed * vect_to_player.y/Abs_vect_to_player;
+        velocity = -max_speed/Abs_vect_to_player * vect_to_player;
     }
     else
     velocity = {0,0};
 
 
-    this->coord.x = this->coord.x + this->velocity.x;
-    this->coord.y = this->coord.y + this->velocity.y;
+    this->coord = this->coord + this->velocity * time;
     this->sprite.setPosition({this->coord.x, this->coord.y} );
+    
 }
 
 void Zombie::turn(Player& pl)
 {
     MoveWithoutIntertion(pl);
+    if ( (this->coord - pl.coord).x * (this->coord - pl.coord).x + (this->coord - pl.coord).y * (this->coord - pl.coord).y < 5)
+    {
+        pl.getDamage(1);
+    }
 }
 
 void Zombie::death()
