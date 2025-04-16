@@ -37,7 +37,7 @@ public:
 
     Player(int hp, float speed, float range);
     void MoveInertion(sf::Event event);
-    void MoveWithoutIntertion(sf::Event event);
+
     void shoot(sf::Event event, list<Tear>& Tears);
     void turn(sf::Event event, bool EnableIntertion, list<Tear>& Tears);
     void death();

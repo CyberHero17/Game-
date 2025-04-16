@@ -5,6 +5,7 @@
 Player::Player(int hp, float max_speed, float range)
 {
     this->range = range;
+    this->mass = 3;
 
     BodyDirection = "Down";
     HeadDirection = "Down";
@@ -84,11 +85,11 @@ void Player::MoveInertion(sf::Event event) // что просходит с иг�
     if (sf::Keyboard::isKeyPressed(sf::Keyboard::D)) 
     {
         dV.x += acceleration * time;
-        BodyDirection = "Right";                                                                    // существует баг, что если быстро нажимать W-A-S-D
-        BodySprite = BodyAnimationSprites[ (BodyAnimationTime * int(this->max_speed * 100)/30000)%10 + 10 ];     // то появляется спрайт тела в (0,0) - это связано с тем что программа считает, 
-        if(time_from_shooting > 0.5)                                                                //что за 1 кадр (по умолчанию 10 мс) нажатые на клавиатуре клавиши не успевают измениться
-        {                                                                                           // исправляется заменой всех sf::keyboard::isPressed на event.type == keypressed...
-            HeadSprite.setTextureRect(sf::IntRect(64,0,32,32));                                     // т.е. в течение 1 кадра event = const
+        BodyDirection = "Right";                                                                                // существует баг, что если быстро нажимать W-A-S-D
+        BodySprite = BodyAnimationSprites[ (BodyAnimationTime * int(this->max_speed * 100)/30000)%10 + 10 ];    // то появляется спрайт тела в (0,0) - это связано с тем что программа считает, 
+        if(time_from_shooting > 0.5)                                                                            //что за 1 кадр (по умолчанию 10 мс) нажатые на клавиатуре клавиши не успевают измениться
+        {                                                                                                       // исправляется заменой всех sf::keyboard::isPressed на event.type == keypressed...
+            HeadSprite.setTextureRect(sf::IntRect(64,0,32,32));                                                 // т.е. в течение 1 кадра event = const
             HeadDirection = "Right";                                      
         }                                                                          
     }
@@ -124,15 +125,7 @@ void Player::MoveInertion(sf::Event event) // что просходит с иг�
     if (dV == null_vect) // т.е. в случае если мы ничего не нажимаем (персонаж должен сам затормозить)
     {
         this->body_time.restart(); // пока Айзек не ходит - таймер анимации на нуле
-        if (velocity.ModuleQuadr() < (max_speed/10)*(max_speed/10))
-        {
-            velocity = {0,0};
-            return;
-        }
-        else
-        {
-            velocity = velocity * 0.94; // коэфициент подобран опытным путем
-        }
+        velocity = velocity * 0.94; // коэфициент подобран опытным путем
     }
 
     this->velocity = this->velocity + dV;
@@ -145,38 +138,15 @@ void Player::MoveInertion(sf::Event event) // что просходит с иг�
     this->coord = this->coord + this->velocity * time;
 
 
-    this->HeadSprite.setPosition({this->coord.x, this->coord.y} );
-    if(BodyDirection != "Left") this->BodySprite.setPosition({this->coord.x, this->coord.y + 20} );
-    if(BodyDirection == "Left") this->BodySprite.setPosition({this->coord.x + 64, this->coord.y + 20} );
+    this->HeadSprite.setPosition({this->coord.x - 16, this->coord.y - 32} );
+    if(BodyDirection != "Left") this->BodySprite.setPosition({this->coord.x - 16, this->coord.y + 20 - 32} ); // -16 и -32 чтобы спрайт рисовался не в угле а в центре
+    if(BodyDirection == "Left") this->BodySprite.setPosition({this->coord.x - 16 + 64, this->coord.y + 20 - 32} ); // +64 и +20 - чтобы тело и голова были связаны
     
     return;
 
 }
 
-void Player::MoveWithoutIntertion(sf::Event event)
-{
-    //cout << "Player's turn" << endl;
-    float time = 1;
-    Vector2D dr = {0,0};
 
-    if (sf::Keyboard::isKeyPressed(sf::Keyboard::A)) dr.x -= max_speed * time; // нажимая на кнопки мы контролируем не скорость, а ускорение чтобы была инерция
-    if (sf::Keyboard::isKeyPressed(sf::Keyboard::D)) dr.x += max_speed * time;
-    if (sf::Keyboard::isKeyPressed(sf::Keyboard::S)) dr.y += max_speed * time;
-    if (sf::Keyboard::isKeyPressed(sf::Keyboard::W)) dr.y -= max_speed * time;
-
-    if (dr.x * dr.x + dr.y * dr.y > (max_speed * time) * (max_speed * time) ) 
-    {
-        dr.x = dr.x * 0.7071067; // нормировка чтобы по модулю dX было равно V * коэф
-        dr.y = dr.y * 0.7071067;
-    }
-    
-
-    this->coord.x += dr.x;
-    this->coord.y += dr.y;
-
-    this->HeadSprite.setPosition({this->coord.x, this->coord.y} );
-    this->BodySprite.setPosition({this->coord.x, this->coord.y + 20} );
-}
 
 void Player::shoot(sf::Event event, list<Tear>& Tears)
 {
@@ -218,7 +188,7 @@ void Player::turn(sf::Event event, bool EnableInertion, list<Tear>& Tears)
 
 
     this->BodySprite = this->BodyAnimationSprites[2];
-    this->BodySprite.setPosition({this->coord.x, this->coord.y + 20} );
+    this->BodySprite.setPosition({this->coord.x - 16, this->coord.y + 20 - 32} ); 
 
     if(time_from_shooting > this->time_betweenshoots/3)
     {
@@ -234,8 +204,7 @@ void Player::turn(sf::Event event, bool EnableInertion, list<Tear>& Tears)
     //HeadDirection = "Down";
     BodyDirection = "Down";
 
-    if(EnableInertion) MoveInertion(event);
-    else MoveWithoutIntertion(event);
+    MoveInertion(event);
 
     if (event.type == sf::Event::KeyPressed)
     {

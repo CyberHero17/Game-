@@ -14,6 +14,7 @@ using std::string;
 class Entity
 {
 public:
+    float mass;
     string name;
     float acceleration;
     int health;

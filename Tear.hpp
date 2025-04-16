@@ -17,9 +17,12 @@ class Zombie;
 class Tear
 {
 public:
+    sf::Clock animation_time;
+    bool Animation;
     float damage;
     float range;
     float max_speed;
+    float mass;
     Vector2D velocity;
     Vector2D coord;
     sf::Texture texture;
@@ -32,5 +35,6 @@ public:
     int turn(list<Zombie> &Zombies);
     Vector2D getCoord();
     sf::Sprite getSprite();
+    void death();
 }; 
 std::ostream& operator<<(std::ostream& os, const Tear& t);

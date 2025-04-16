@@ -13,20 +13,20 @@ using std::list;
 int main()
 {
     
-    list<Tear> Tears(0);
+    list<Tear> Tears;
     list<Zombie> Zombies;
 
     bool EnableInertion = 1;
     sf::RenderWindow window(sf::VideoMode(1000, 600), "The Binding of the Isaac"); // с этой частью связана утечка приемрно в 259,467 байт
     int delta_time = 5;
 
-    Player Isaac(1, 0.8 * delta_time, 5);
+    Player Isaac(10, 0.8 * delta_time, 5);
 
-    sf::Texture Z1_texture;
-    Z1_texture.loadFromFile("Textures/Zombie.png");
-
-    Zombie Z1(6, 0.2 * delta_time, Z1_texture);
-    Zombies.push_back(Z1);
+    Zombie Z1(6, 0.2 * delta_time, {100,200}); Zombies.push_back(Z1);
+    //Zombie Z2(6, 0.2 * delta_time, {150,200}); Zombies.push_back(Z2);
+    //Zombie Z3(6, 0.2 * delta_time, {200,200}); Zombies.push_back(Z3);
+    //Zombie Z4(6, 0.2 * delta_time, {100,200}); Zombies.push_back(Z4);
+    
 
     while (window.isOpen())
     {
@@ -68,7 +68,7 @@ int main()
         {
             it_Tear->sprite.setTexture(it_Tear->texture); // почему у слез не установлен спрайт по умолчанию?
             int WhatHappened = it_Tear->turn(Zombies);
-            if (WhatHappened == 1) // т.е. если слеза не врезаласась
+            if (WhatHappened == 1) // т.е. если слеза не врезаласась или уже уничтожена и просто проигрывает свою анимацию
             {
                 it_Tear++;
                 continue;
@@ -83,22 +83,32 @@ int main()
                 it_Tear = Tears.erase(it_Tear); // да, набор действий такой же как и при попадании в монстра, но пока оставим так, вдруг потом изменится
                 continue;
             }
+            if(WhatHappened == 3) // т.е. надо запустить анимацию
+            {
+                it_Tear++;
+                continue;
+            }
         }
 
 
         window.clear(); // пошла отрисовка
+
         for(auto it = Tears.begin(); it != Tears.end(); ++it)
         {
             window.draw(it->getSprite());
         }
+
         for(auto it = Zombies.begin(); it != Zombies.end(); ++it)
         {
-            window.draw(it->getSprite());
+            window.draw(it->BodySprite);
+            window.draw(it->HeadSprite);
         }
 
         
         window.draw(Isaac.BodySprite);
         window.draw(Isaac.HeadSprite);
+        
+
         window.display();
         
     }
