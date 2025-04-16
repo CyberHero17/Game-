@@ -4,3 +4,7 @@ default_build: main.cpp	Entity.hpp Entity.cpp Player.hpp Player.cpp Structures.c
 
 clean:
 	rm main
+add:
+	git status
+	git add *.cpp *.hpp Makefile
+	git status

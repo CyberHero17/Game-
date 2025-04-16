@@ -20,7 +20,7 @@ int main()
     sf::RenderWindow window(sf::VideoMode(1000, 600), "The Binding of the Isaac"); // с этой частью связана утечка приемрно в 259,467 байт
     int delta_time = 5;
 
-    Player Isaac(1, 0.8 * delta_time);
+    Player Isaac(1, 0.8 * delta_time, 5);
 
     sf::Texture Z1_texture;
     Z1_texture.loadFromFile("Textures/Zombie.png");

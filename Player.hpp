@@ -20,6 +20,8 @@ class Tear;
 class Player: public Entity
 {
 public:
+    float range;
+
     float time_betweenshoots;
     float time_invicibility;
 
@@ -33,7 +35,7 @@ public:
 
     vector<sf::Sprite> BodyAnimationSprites;
 
-    Player(int hp, float speed);
+    Player(int hp, float speed, float range);
     void MoveInertion(sf::Event event);
     void MoveWithoutIntertion(sf::Event event);
     void shoot(sf::Event event, list<Tear>& Tears);

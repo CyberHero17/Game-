@@ -21,11 +21,11 @@ Tear::Tear()
 
 }
 
-Tear::Tear(Vector2D coord, sf::Event event)
+Tear::Tear(Vector2D coord, sf::Event event, float range, string HeadDirection)
 {
     this->time.restart();
     this->damage = 2;
-    this->range = 3;
+    this->range = range;
     this->max_speed = 5;
     this->texture.loadFromFile("Textures/Tear.png");
     this->sprite.setTexture(this->texture);
@@ -37,12 +37,14 @@ Tear::Tear(Vector2D coord, sf::Event event)
         else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right)) velocity = {max_speed, 0};
         else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Down)) velocity = {0, max_speed};
         else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up)) velocity = {0, -max_speed};
+        else
+        {
+            cout << "Button wasn't pressed\n";
+            velocity = {max_speed, 0};
+        }
+
     }
-    else
-    {
-        cout << "Button wasn't pressed\n";
-        velocity = {max_speed, 0};
-    }
+
 
 }
 

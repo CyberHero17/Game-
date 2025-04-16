@@ -2,8 +2,10 @@
 #include <SFML/Graphics.hpp>
 #include <math.h>
 
-Player::Player(int hp, float max_speed)
+Player::Player(int hp, float max_speed, float range)
 {
+    this->range = range;
+
     BodyDirection = "Down";
     HeadDirection = "Down";
     this->time_betweenshoots = 0.5;
@@ -71,7 +73,7 @@ void Player::MoveInertion(sf::Event event) // что просходит с иг�
     {
         dV.x -= acceleration * time; // нажимая на кнопки мы контролируем не скорость, а ускорение чтобы была инерция
         BodyDirection = "Left";
-        BodySprite = BodyAnimationSprites[ (BodyAnimationTime/100)%10 + 10 ];
+        BodySprite = BodyAnimationSprites[ (BodyAnimationTime * int(this->max_speed*100)/30000)%10 + 10 ];
         BodySprite.scale(-1,1);
         if(time_from_shooting > 0.5)  
         {
@@ -82,11 +84,11 @@ void Player::MoveInertion(sf::Event event) // что просходит с иг�
     if (sf::Keyboard::isKeyPressed(sf::Keyboard::D)) 
     {
         dV.x += acceleration * time;
-        BodyDirection = "Right";                                                // существует баг, что если быстро нажимать W-A-S-D
-        BodySprite = BodyAnimationSprites[ (BodyAnimationTime/100)%10 + 10 ];   // то появляется спрайт тела в (0,0) - это связано с тем что программа считает, 
-        if(time_from_shooting > 0.5)                                            //что за 1 кадр (по умолчанию 10 мс) нажатые на клавиатуре клавиши не успевают измениться
-        {                                                                       // исправляется заменой всех sf::keyboard::isPressed на event.type == keypressed...
-            HeadSprite.setTextureRect(sf::IntRect(64,0,32,32));                 // т.е. в течение 1 кадра event = const
+        BodyDirection = "Right";                                                                    // существует баг, что если быстро нажимать W-A-S-D
+        BodySprite = BodyAnimationSprites[ (BodyAnimationTime * int(this->max_speed * 100)/30000)%10 + 10 ];     // то появляется спрайт тела в (0,0) - это связано с тем что программа считает, 
+        if(time_from_shooting > 0.5)                                                                //что за 1 кадр (по умолчанию 10 мс) нажатые на клавиатуре клавиши не успевают измениться
+        {                                                                                           // исправляется заменой всех sf::keyboard::isPressed на event.type == keypressed...
+            HeadSprite.setTextureRect(sf::IntRect(64,0,32,32));                                     // т.е. в течение 1 кадра event = const
             HeadDirection = "Right";                                      
         }                                                                          
     }
@@ -94,7 +96,7 @@ void Player::MoveInertion(sf::Event event) // что просходит с иг�
     {
         dV.y += acceleration * time;
         BodyDirection = "Down";
-        BodySprite = BodyAnimationSprites[ (BodyAnimationTime/100)%10 ];
+        BodySprite = BodyAnimationSprites[ (BodyAnimationTime * int(this->max_speed*100)/30000)%10 ];
         if(time_from_shooting > 0.5)
         {
             HeadSprite.setTextureRect(sf::IntRect(0,0,32,32));
@@ -105,7 +107,7 @@ void Player::MoveInertion(sf::Event event) // что просходит с иг�
     {
         dV.y -= acceleration * time;
         BodyDirection = "Up";
-        BodySprite = BodyAnimationSprites[ (BodyAnimationTime/100)%10 ];
+        BodySprite = BodyAnimationSprites[ (BodyAnimationTime * int(this->max_speed*100)/30000)%10 ];
         if(time_from_shooting > 0.5)
         {
             HeadSprite.setTextureRect(sf::IntRect(128,0,32,32));
@@ -199,7 +201,7 @@ void Player::shoot(sf::Event event, list<Tear>& Tears)
         if( sf::Keyboard::isKeyPressed(sf::Keyboard::Up)) {HeadSprite.setTextureRect(sf::IntRect(160,0,32,32)); HeadDirection = "Up";}
 
         this->tears_time.restart();
-        Tear T(this->coord, event); // тут у слезы есть спрайт, но при переносе в Tears он пропадает
+        Tear T(this->coord, event, this->range, this->HeadDirection); // тут у слезы есть спрайт, но при переносе в Tears он пропадает
         Tears.push_back(T); // пока что в main.cpp стоит костыль 
     }
 
@@ -207,31 +209,30 @@ void Player::shoot(sf::Event event, list<Tear>& Tears)
 
 void Player::turn(sf::Event event, bool EnableInertion, list<Tear>& Tears)
 {
-    HeadDirection = "Down";
-    BodyDirection = "Down";
+
     
     
         
     
     float time_from_shooting = this->tears_time.getElapsedTime().asSeconds();
 
-    if(time_from_shooting >= 0.5) HeadSprite.setTextureRect(sf::IntRect(0,0,32,32));
 
     this->BodySprite = this->BodyAnimationSprites[2];
     this->BodySprite.setPosition({this->coord.x, this->coord.y + 20} );
 
     if(time_from_shooting > this->time_betweenshoots/3)
     {
-        if( HeadDirection == "Left") HeadSprite.setTextureRect(sf::IntRect(96,0,-32,32)); // возвращение головы в обычное состояние
+        if( HeadDirection == "Left") HeadSprite.setTextureRect(sf::IntRect(96,0,-32,32)); // возвращение головы в несжатое состояние
         if( HeadDirection == "Right") HeadSprite.setTextureRect(sf::IntRect(64,0,32,32));
         if( HeadDirection == "Down") HeadSprite.setTextureRect(sf::IntRect(0,0,32,32));
         if( HeadDirection == "Up") HeadSprite.setTextureRect(sf::IntRect(128,0,32,32));
     } 
 
-    if(time_from_shooting > 0.5)
-    {
-        HeadSprite.setTextureRect(sf::IntRect(0,0,32,32)); // если ничего не происходит (кнопки не нажаты), то Айзек смотрит вниз
-    } 
+    if(time_from_shooting > 0.8) HeadSprite.setTextureRect(sf::IntRect(0,0,32,32)); // если ничего не происходит (кнопки не нажаты), то Айзек смотрит вниз
+
+
+    //HeadDirection = "Down";
+    BodyDirection = "Down";
 
     if(EnableInertion) MoveInertion(event);
     else MoveWithoutIntertion(event);

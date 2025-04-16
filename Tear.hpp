@@ -27,7 +27,7 @@ public:
     sf::Clock time;
 public:
 
-    Tear(Vector2D coord, sf::Event event);
+    Tear(Vector2D coord, sf::Event event, float range, string HeadDirection);
     Tear();
     int turn(list<Zombie> &Zombies);
     Vector2D getCoord();
