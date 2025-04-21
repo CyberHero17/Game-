@@ -20,28 +20,50 @@ class Tear;
 class Player: public Entity
 {
 public:
-    float range;
+    int HPContCount;
+    /*обьявлена в Entity*/                    sf::Text max_speed_Text;
+    float Damage;       sf::Text DamageText;
+    float TearsFreq;    sf::Text TearsFreqText; // скорострельность
+    float Range;        sf::Text RangeText;
+    float ShotSpeed;    sf::Text ShotSpeedText;
+    float Luck;         sf::Text LuckText;
 
-    float time_betweenshoots;
+    float DevilChance; sf::Text DevilChanceText;
+    float AngelChance; sf::Text AngelChanceText;
+
+    float TearMass;
     float time_invicibility;
+
+    sf::Texture CharacteristicsTexture;
+    sf::Sprite CharacteristicsSprite;
 
     sf::Sprite BodySprite;
     sf::Sprite HeadSprite;
+    sf::Sprite GettingItemSprite;
+
     string BodyDirection;
     string HeadDirection;
     sf::Clock tears_time;
     sf::Clock damage_time;
     sf::Clock body_time;
+    sf::Clock GettingItemTime;
+
+
+    bool GettingItem;
+    list<sf::Sprite> HealthConteiners; 
+    list<sf::Sprite> HealthHearts; 
+    
 
     vector<sf::Sprite> BodyAnimationSprites;
 
-    Player(int hp, float speed, float range);
+    Player(int hp, float max_speed, float Damage, float TearsFreq, float Range, float ShotSpeed, float Luck, float TearMass);
     void MoveInertion(sf::Event event);
 
     void shoot(sf::Event event, list<Tear>& Tears);
     void turn(sf::Event event, bool EnableIntertion, list<Tear>& Tears);
     void death();
     void getDamage(int D);
+    void draw(sf::RenderWindow& window);
 
     ~Player() {};
 };

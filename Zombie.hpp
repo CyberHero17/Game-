@@ -6,12 +6,14 @@
 #include <SFML/Graphics.hpp>
 #include "Entity.hpp"
 #include <vector>
+#include <list>
 
 
 using std::cin;
 using std::cout;
 using std::endl;
 using std::vector;
+using std::list;
 class Player;
 class Tear;
 class Zombie: public Entity
@@ -28,7 +30,7 @@ public:
 
 
     void MoveInertion(Player& pl);
-    int turn(Player& pl);
+    int turn(Player& pl, list<Zombie>& Zombies);
     void getDamage(Tear& t);
     void death();
 

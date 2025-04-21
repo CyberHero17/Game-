@@ -117,7 +117,8 @@ void Zombie::MoveInertion(Player &pl)
     if(this->BodyDirection == "Left") this->BodySprite.setPosition({this->coord.x - 16 + 64, this->coord.y + 20 - 32} ); // +64 и +20 - чтобы тело и голова были связаны
 }
 
-int Zombie::turn(Player& pl)
+
+int Zombie::turn(Player& pl, list<Zombie>& Zombies)
 {
     if(this->getHealth() <= 0)
     {
@@ -126,12 +127,22 @@ int Zombie::turn(Player& pl)
     else
     {
         MoveInertion(pl);
+        for(auto it = Zombies.begin(); it != Zombies.end(); it++)
+        {
+            if ( (this->coord - it->coord).ModuleQuadr() < 1000)
+            {
+                Vector2D deltaV = -acceleration/(this->coord - it->coord).Module() * (this->coord - it->coord);
+                it->velocity = it->velocity + 5*(this->mass/it->mass) * dV; // эффект должен быть в 2 раза меньше т.к. взаимодействие учитывается 2 раза
+                this->velocity = this->velocity - 5*(it->mass/this->mass) * dV;
+            }
+        }
         if ( (this->coord - pl.coord).ModuleQuadr() < 1000)
         {
             pl.velocity = pl.velocity + (5 * this->mass/pl.mass) * dV;
             this->velocity = this->velocity - (2 * pl.mass/this->mass) * dV;
             pl.getDamage(1);
         }
+
         return 1;
     }
 
@@ -139,9 +150,9 @@ int Zombie::turn(Player& pl)
 
 void Zombie::getDamage(Tear &t)
 {
-    this->health -= t.damage;
+    this->health -= t.Damage;
     this->velocity = this->velocity + t.mass/this->mass * t.velocity;
-    cout << this->name << " got " << t.damage << " damage\n";
+    cout << this->name << " got " << t.Damage << " damage\n";
 
 }
 

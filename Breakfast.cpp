@@ -1,0 +1,77 @@
+#include "Breakfast.hpp"
+#include "GlobalVariables.hpp"
+Breakfast::Breakfast(Vector2D coord)
+{
+    ispicked = 0;
+    PedestalTexture.loadFromFile("Textures/Pedestal.png"); // это глобальные переменные
+    BreakfastTexture.loadFromFile("Textures/Breakfast.png");
+    this->coord = coord;
+
+    PedestalSprite.setTexture(PedestalTexture); PedestalSprite.setPosition(coord.x - 24 + 16, coord.y - 16 + 16);
+    ItemSprite.setTexture(BreakfastTexture); ItemSprite.setPosition(coord.x - 14,coord.y - 48);
+    id = 1;
+    name = "Breakfast";
+    collider_size = 20;
+
+}
+
+void Breakfast::pick(Player &pl)
+{
+    pl.HPContCount += 1;
+    pl.health += 1;
+    if (pl.health < pl.HPContCount)
+    {
+        pl.health += 1;
+    }
+    ispicked = 1;
+    pl.GettingItem = 1;
+    pl.GettingItemTime.restart();
+}
+
+void Breakfast::draw(sf::RenderWindow &window)
+{
+    float time = PickedTime.getElapsedTime().asMilliseconds();
+    window.draw(PedestalSprite);
+    if(not ispicked)
+    {
+        window.draw(ItemSprite);
+    }
+    if(ispicked && time < 2000)
+    {
+        window.draw(ItemSprite);
+    }
+}
+
+void Breakfast::turn(Player &pl)
+{
+    float time = this->AnimationTime.getElapsedTime().asMilliseconds() * 0.003;
+    ItemSprite.setPosition(coord.x - 14, coord.y - 48 + 10 * sin(time) );
+    Vector2D vect_to_pl = pl.coord - this->coord;
+    if(not ispicked)
+    {
+        
+        if (vect_to_pl.ModuleQuadr() <= collider_size * collider_size)
+        {
+            pick(pl);
+            PickedTime.restart();
+            
+        }
+    }
+
+    if (  vect_to_pl.ModuleQuadr() < collider_size * collider_size)
+    {
+        Vector2D dV = 1/vect_to_pl.ModuleQuadr() * vect_to_pl; 
+        pl.velocity = pl.velocity + dV;
+    }
+
+    if (ispicked)
+    {
+        float time = PickedTime.getElapsedTime().asMilliseconds();
+        if(time < 2000)
+        {
+            ItemSprite.setPosition(pl.coord.x - 20, pl.coord.y - 80);
+        }
+    }
+
+    
+}

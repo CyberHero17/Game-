@@ -19,9 +19,9 @@ class Tear
 public:
     sf::Clock animation_time;
     bool Animation;
-    float damage;
-    float range;
-    float max_speed;
+    float Damage;
+    float Range;
+    float ShotSpeed;
     float mass;
     Vector2D velocity;
     Vector2D coord;
@@ -30,7 +30,7 @@ public:
     sf::Clock time;
 public:
 
-    Tear(Vector2D coord, sf::Event event, float range, string HeadDirection);
+    Tear(Vector2D coord, sf::Event event, string HeadDirection, float Damage, float Range, float ShotSpeed, float mass);
     Tear();
     int turn(list<Zombie> &Zombies);
     Vector2D getCoord();

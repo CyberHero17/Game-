@@ -1,5 +1,6 @@
 #pragma once
 #include <iostream>
+#include <math.h>
 struct point // возможно не нужен
 {
     float x;
@@ -36,6 +37,7 @@ public:
     Vector2D operator* (const float a) const;
 
     float ModuleQuadr();
+    float Module();
 };
 
 

@@ -1,18 +1,24 @@
 #include <iostream>
-#include <SFML/Graphics.hpp>
-#include "Entity.hpp"
-#include "Player.hpp"
-#include "Zombie.hpp"
 #include <chrono>
 #include <thread>
 #include <list>
 
+#include <SFML/Graphics.hpp>
+#include "Entity.hpp"
+#include "Player.hpp"
+#include "Zombie.hpp"
+#include "GlobalVariables.hpp"
+#include "Breakfast.hpp"
 
 using std::list;
 
 int main()
 {
+    HealthHeartsTexture.loadFromFile("Textures/Health.png");
+    GettingItemTexture.loadFromFile("Textures/IsaacTexture3.png");
     
+
+
     list<Tear> Tears;
     list<Zombie> Zombies;
 
@@ -20,13 +26,14 @@ int main()
     sf::RenderWindow window(sf::VideoMode(1000, 600), "The Binding of the Isaac"); // с этой частью связана утечка приемрно в 259,467 байт
     int delta_time = 5;
 
-    Player Isaac(10, 0.8 * delta_time, 5);
+    Player Isaac(5, 0.8 * delta_time, 2, 3 , 5.0f, 5, 0, 2);
 
     Zombie Z1(6, 0.2 * delta_time, {100,200}); Zombies.push_back(Z1);
-    //Zombie Z2(6, 0.2 * delta_time, {150,200}); Zombies.push_back(Z2);
-    //Zombie Z3(6, 0.2 * delta_time, {200,200}); Zombies.push_back(Z3);
-    //Zombie Z4(6, 0.2 * delta_time, {100,200}); Zombies.push_back(Z4);
+    Zombie Z2(6, 0.2 * delta_time, {150,200}); Zombies.push_back(Z2);
+    Zombie Z3(6, 0.2 * delta_time, {200,200}); Zombies.push_back(Z3);
+    Zombie Z4(6, 0.2 * delta_time, {100,200}); Zombies.push_back(Z4);
     
+    Breakfast Br ({400,300});
 
     while (window.isOpen())
     {
@@ -44,7 +51,7 @@ int main()
         auto it_Monst = Zombies.begin();
         while(it_Monst != Zombies.end())
         {
-            int WhatHappened = it_Monst->turn(Isaac);
+            int WhatHappened = it_Monst->turn(Isaac, Zombies);
             if (WhatHappened == 1) // т.е. если с монстром ничего не произошло
             {    
                 it_Monst++;
@@ -59,9 +66,9 @@ int main()
 
         }
 
-
+        Br.turn(Isaac);
         Isaac.turn(event, EnableInertion, Tears);
-
+        
 
         auto it_Tear = Tears.begin();
         while(it_Tear != Tears.end()) // ход слез
@@ -105,8 +112,10 @@ int main()
         }
 
         
-        window.draw(Isaac.BodySprite);
-        window.draw(Isaac.HeadSprite);
+        
+        Isaac.draw(window);
+        Br.draw(window);
+        //window.draw(Isaac.max_speed_Text); // SgFault
         
 
         window.display();

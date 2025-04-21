@@ -31,6 +31,11 @@ float Vector2D::ModuleQuadr()
     return x * x + y * y;
 }
 
+float Vector2D::Module()
+{
+    return sqrt(this->ModuleQuadr());
+}
+
 // Оператор умножения скаляра на вектор
 Vector2D operator* (float a, const Vector2D& v) {
    return v * a;

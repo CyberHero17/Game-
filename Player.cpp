@@ -1,20 +1,66 @@
 #include "Player.hpp"
 #include <SFML/Graphics.hpp>
 #include <math.h>
+#include "GlobalVariables.hpp"
 
-Player::Player(int hp, float max_speed, float range)
+Player::Player(int hp, float max_speed, float Damage, float TearsFreq, float Range, float ShotSpeed, float Luck, float TearMass)
 {
-    this->range = range;
+    GettingItemTexture.loadFromFile("Textures/IsaacTexture3.png");
+    this->GettingItemSprite.setTexture(GettingItemTexture);
+    GettingItem = 0;
+
+    this->health = hp;
+    this->HPContCount = hp;
+
+    this->max_speed = max_speed;
+    this->Damage = Damage;
+    this->TearsFreq = TearsFreq; // скорострельность
+    this->Range = Range;
+    this->ShotSpeed = ShotSpeed;
+    this->Luck = Luck;
+    
+
+    HealthConteinersTexture.loadFromFile("Textures/HealthConteiner.png");
+    HealthHeartsTexture.loadFromFile("Textures/Health.png");
+
+    for(int i = 0; i < 12; i++)
+    {
+        sf::Sprite HPContSprite(HealthConteinersTexture); // спрайты контйенеров
+        HPContSprite.setPosition(20 + i * 45, 20);
+        HPContSprite.scale(0.8, 0.8);
+        HealthConteiners.push_back(HPContSprite);
+    }
+
+    for(int i = 0; i < 12; i++)
+    {
+        sf::Sprite HPSprite(HealthHeartsTexture);
+        HPSprite.setPosition(20 + i * 45, 20); 
+        HPSprite.scale(0.8, 0.8);
+        HealthHearts.push_back(HPSprite);
+    }
+
+    /*font.loadFromFile("Fonts/TimesNewRoman.ttf");
+    this->max_speed_Text.setFont(font);
+    this->DamageText.setFont(font);
+    this->TearsFreqText.setFont(font);
+
+    this->max_speed_Text.setPosition(20, 100); this->max_speed_Text.setString(std::to_string(this->max_speed)); max_speed_Text.setFillColor(sf::Color::Green);
+    */ // проклято - почему то вызывает segmentation fault при отрисовке max_speed_Text
+    this->CharacteristicsTexture.loadFromFile("Textures/Characteristics.png");
+    this->CharacteristicsSprite.setTexture(this->CharacteristicsTexture);
+    this->CharacteristicsSprite.setPosition(0, 100);
+    this->CharacteristicsSprite.scale(0.8,0.8);
+
+
+    this->TearMass = TearMass;
     this->mass = 3;
 
     BodyDirection = "Down";
     HeadDirection = "Down";
-    this->time_betweenshoots = 0.5;
     this->time_invicibility = 1;
     this->name = "Isaac";
-    this->acceleration = max_speed/20;
-    this->health = hp;
-    this->max_speed = max_speed;
+    this->acceleration = max_speed/10;
+
     this->texture.loadFromFile("Textures/Isaac_textures.png");
     this->HeadSprite.setTexture(this->texture);
     this->HeadSprite.setTextureRect(sf::IntRect(0,0,32,32));
@@ -152,7 +198,7 @@ void Player::shoot(sf::Event event, list<Tear>& Tears)
 {
     float time_from_shooting = this->tears_time.getElapsedTime().asSeconds();
     
-    if(time_from_shooting > this->time_betweenshoots/3)
+    if(time_from_shooting > 1/(3*this->TearsFreq) )
     {
         if( sf::Keyboard::isKeyPressed(sf::Keyboard::Left)) {HeadSprite.setTextureRect(sf::IntRect(96,0,-32,32)); HeadDirection = "Left";} // возвращение головы несжатое состояние
         if( sf::Keyboard::isKeyPressed(sf::Keyboard::Right)) {HeadSprite.setTextureRect(sf::IntRect(64,0,32,32)); HeadDirection = "Right";}
@@ -162,7 +208,7 @@ void Player::shoot(sf::Event event, list<Tear>& Tears)
 
 
 
-    if (time_from_shooting > this->time_betweenshoots)
+    if (time_from_shooting > 1/this->TearsFreq )
     {
 
         if( sf::Keyboard::isKeyPressed(sf::Keyboard::Left)) {HeadSprite.setTextureRect(sf::IntRect(128,0,-32,32)); HeadDirection = "Left";} // сейчас сделан выстрел
@@ -171,7 +217,7 @@ void Player::shoot(sf::Event event, list<Tear>& Tears)
         if( sf::Keyboard::isKeyPressed(sf::Keyboard::Up)) {HeadSprite.setTextureRect(sf::IntRect(160,0,32,32)); HeadDirection = "Up";}
 
         this->tears_time.restart();
-        Tear T(this->coord, event, this->range, this->HeadDirection); // тут у слезы есть спрайт, но при переносе в Tears он пропадает
+        Tear T(this->coord, event, this->HeadDirection, this->Damage, this->Range, this->ShotSpeed, this->TearMass); // тут у слезы есть спрайт, но при переносе в Tears он пропадает
         Tears.push_back(T); // пока что в main.cpp стоит костыль 
     }
 
@@ -190,7 +236,7 @@ void Player::turn(sf::Event event, bool EnableInertion, list<Tear>& Tears)
     this->BodySprite = this->BodyAnimationSprites[2];
     this->BodySprite.setPosition({this->coord.x - 16, this->coord.y + 20 - 32} ); 
 
-    if(time_from_shooting > this->time_betweenshoots/3)
+    if(time_from_shooting > 1/(3*this->TearsFreq) )
     {
         if( HeadDirection == "Left") HeadSprite.setTextureRect(sf::IntRect(96,0,-32,32)); // возвращение головы в несжатое состояние
         if( HeadDirection == "Right") HeadSprite.setTextureRect(sf::IntRect(64,0,32,32));
@@ -216,6 +262,18 @@ void Player::turn(sf::Event event, bool EnableInertion, list<Tear>& Tears)
             shoot(event, Tears);
         } 
     } 
+
+    if(this->GettingItem) // 160 432 64 64
+    {
+        float time = GettingItemTime.getElapsedTime().asMilliseconds();
+        if( time > 2000)
+        {
+            GettingItem = 0;
+        }
+        
+        this->GettingItemSprite.setTextureRect(sf::IntRect(160, 432, 64, 64) ); // подбор предмета
+        this->GettingItemSprite.setPosition(this->coord.x - 16, this->coord.y - 32);
+    }
 }
 
 void Player::death()
@@ -232,5 +290,37 @@ void Player::getDamage(int D)
         this->health -= D;
         cout << this->name << " got " << D << " damage" << endl;
         cout << this->name << "'s health = " << this->health << endl;
+        if(not this->HealthHearts.empty() )
+            this->HealthHearts.pop_back();
     }
+}
+
+void Player::draw(sf::RenderWindow &window)
+{
+    auto it_HPCont = HealthConteiners.begin();
+    for(int i = 0; i < this->HPContCount; i++)
+    {
+        window.draw(*it_HPCont); // отрисовка контейнеров хп
+        it_HPCont++;
+    }
+
+    auto it_HPHearts = HealthHearts.begin();
+    for(int i = 0; i < this->health; i++)
+    {
+        window.draw(*it_HPHearts); // отрисовка хп
+        it_HPHearts++;
+    }
+
+    if(not GettingItem)
+    {
+        window.draw(this->BodySprite);
+        window.draw(this->HeadSprite);
+    }
+    else
+    {
+        window.draw(this->GettingItemSprite);
+    }
+
+    window.draw(this->CharacteristicsSprite);
+
 }

@@ -9,27 +9,31 @@ Tear::Tear()
 {
     this->time.restart();
     this->mass = 1;
-    this->damage = 2;
-    this->range = 10;
-    this->max_speed = 5;
+    this->Damage = 2;
+    this->Range = 10;
+    this->ShotSpeed = 5;
     this->texture.loadFromFile("Textures/Tear.png");
     this->sprite.setTexture(this->texture);
     this->coord = coord;
     
 
     cout << "Default tear constructor\n";
-    velocity = {max_speed, 0};
+    velocity = {ShotSpeed, 0};
 
 }
 
-Tear::Tear(Vector2D coord, sf::Event event, float range, string HeadDirection)
+Tear::Tear(Vector2D coord, sf::Event event, string HeadDirection, float Damage, float Range, float ShotSpeed, float mass)
 {
-    this->mass = 1;
+    this->Damage = Damage;
+    this->Range = Range;
+    this->ShotSpeed = ShotSpeed;
+    
+    this->mass = mass;
     Animation = 0;
     this->time.restart();
-    this->damage = 2;
-    this->range = range;
-    this->max_speed = 5;
+    
+    
+    
     this->texture.loadFromFile("Textures/Tear.png");
     this->sprite.setTexture(this->texture);
     
@@ -39,32 +43,31 @@ Tear::Tear(Vector2D coord, sf::Event event, float range, string HeadDirection)
     {
         if (     sf::Keyboard::isKeyPressed(sf::Keyboard::Left)) 
         {
-            velocity = {-max_speed, 0};
+            velocity = {-ShotSpeed, 0};
             this->coord = {coord.x-16, coord.y - 12};
         }
         else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right)) 
         {
-            velocity = {max_speed, 0};
+            velocity = {ShotSpeed, 0};
             this->coord = {coord.x + 32 - 8, coord.y - 12};
         }
         else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Down)) 
         {
-            velocity = {0, max_speed};
+            velocity = {0, ShotSpeed};
             this->coord = {coord.x , coord.y + 16 - 4};
         }
         else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up)) 
         {
-            velocity = {0, -max_speed};
+            velocity = {0, -ShotSpeed};
             this->coord = {coord.x , coord.y + 4};
         }
 
         else
         {
             cout << "Button wasn't pressed\n";
-            velocity = {max_speed, 0};
+            velocity = {ShotSpeed, 0};
         }
     }
-    cout << this->coord << endl;
 
 
 }
@@ -76,7 +79,7 @@ int Tear::turn(list<Zombie> &Zombies)
         this->coord.x = this->coord.x + this->velocity.x;
         this->coord.y = this->coord.y + this->velocity.y;
         float time_of_living = time.getElapsedTime().asSeconds();
-        if( time_of_living > this->range/this->max_speed)
+        if( time_of_living > this->Range/this->ShotSpeed)
         {
             this->death();
             return 3; // означает что слеза пропала т.к. изжила свое время
@@ -130,15 +133,15 @@ void Tear::death()
     this->Animation = 1;
     animation_time.restart();
 
-    this->range = range;
-    this->max_speed = 0;
+    this->Range = Range;
+    this->ShotSpeed = 0;
     velocity = {0,0};
 }
 
 std::ostream &operator<<(std::ostream &os, const Tear &t)
 {
     os << "Tear's coodr = " << t.coord << endl;
-    os << "Tear's max_speed = " <<  t.max_speed << endl;
+    os << "Tear's ShotSpeed = " <<  t.ShotSpeed << endl;
     os << "Tear's velocity = " << t.velocity;
     return os;
 }
