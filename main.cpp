@@ -100,10 +100,7 @@ int main()
 
         window.clear(); // пошла отрисовка
 
-        for(auto it = Tears.begin(); it != Tears.end(); ++it)
-        {
-            window.draw(it->getSprite());
-        }
+
 
         for(auto it = Zombies.begin(); it != Zombies.end(); ++it)
         {
@@ -113,8 +110,15 @@ int main()
 
         
         
-        Isaac.draw(window);
+        
         Br.draw(window);
+        
+        for(auto it = Tears.begin(); it != Tears.end(); ++it)
+        {
+            window.draw(it->getSprite());
+        }
+
+        Isaac.draw(window);
         //window.draw(Isaac.max_speed_Text); // SgFault
         
 

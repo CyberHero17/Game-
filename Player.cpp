@@ -5,8 +5,10 @@
 
 Player::Player(int hp, float max_speed, float Damage, float TearsFreq, float Range, float ShotSpeed, float Luck, float TearMass)
 {
+    
     GettingItemTexture.loadFromFile("Textures/IsaacTexture3.png");
     this->GettingItemSprite.setTexture(GettingItemTexture);
+    this->GettingDamageSprite.setTexture(GettingItemTexture); //не опечатка ибо в GettingItemTexture лежит целиком текстура со всеми "эмоциями Айзека"
     GettingItem = 0;
 
     this->health = hp;
@@ -224,14 +226,9 @@ void Player::shoot(sf::Event event, list<Tear>& Tears)
 } 
 
 void Player::turn(sf::Event event, bool EnableInertion, list<Tear>& Tears)
-{
-
-    
-    
-        
-    
+{   
     float time_from_shooting = this->tears_time.getElapsedTime().asSeconds();
-
+    float time_from_damage = this->damage_time.getElapsedTime().asSeconds();
 
     this->BodySprite = this->BodyAnimationSprites[2];
     this->BodySprite.setPosition({this->coord.x - 16, this->coord.y + 20 - 32} ); 
@@ -266,13 +263,18 @@ void Player::turn(sf::Event event, bool EnableInertion, list<Tear>& Tears)
     if(this->GettingItem) // 160 432 64 64
     {
         float time = GettingItemTime.getElapsedTime().asMilliseconds();
-        if( time > 2000)
+        if( time > 1500)
         {
             GettingItem = 0;
         }
         
         this->GettingItemSprite.setTextureRect(sf::IntRect(160, 432, 64, 64) ); // подбор предмета
         this->GettingItemSprite.setPosition(this->coord.x - 16, this->coord.y - 32);
+    }
+    if( time_from_damage < this->time_invicibility)
+    {
+        this->GettingDamageSprite.setTextureRect(sf::IntRect(288, 430, 64, 64) ); // получение урона
+        this->GettingDamageSprite.setPosition(this->coord.x - 16, this->coord.y - 32);
     }
 }
 
@@ -283,8 +285,8 @@ void Player::death()
 
 void Player::getDamage(int D)
 {
-    float time = this->damage_time.getElapsedTime().asSeconds();
-    if (time > this->time_invicibility)
+    float time_from_damage = this->damage_time.getElapsedTime().asSeconds();
+    if (time_from_damage > this->time_invicibility)
     {
         this->damage_time.restart();
         this->health -= D;
@@ -297,6 +299,7 @@ void Player::getDamage(int D)
 
 void Player::draw(sf::RenderWindow &window)
 {
+    int time_from_damage = this->damage_time.getElapsedTime().asMilliseconds();
     auto it_HPCont = HealthConteiners.begin();
     for(int i = 0; i < this->HPContCount; i++)
     {
@@ -311,15 +314,27 @@ void Player::draw(sf::RenderWindow &window)
         it_HPHearts++;
     }
 
-    if(not GettingItem)
+    if( time_from_damage < time_invicibility * 1000)
     {
-        window.draw(this->BodySprite);
-        window.draw(this->HeadSprite);
+        if(time_from_damage%200 < 100) window.draw(this->GettingDamageSprite);
+        else {};
     }
-    else
+    else // первостепенно в анимации - получение урона
     {
-        window.draw(this->GettingItemSprite);
+        if(not GettingItem)
+        {
+            window.draw(this->BodySprite);
+            window.draw(this->HeadSprite);
+        }
+        else
+        {
+            window.draw(this->GettingItemSprite);
+        }
     }
+
+
+
+
 
     window.draw(this->CharacteristicsSprite);
 

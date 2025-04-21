@@ -36,7 +36,7 @@ void Breakfast::draw(sf::RenderWindow &window)
     {
         window.draw(ItemSprite);
     }
-    if(ispicked && time < 2000)
+    if(ispicked && time < 1500)
     {
         window.draw(ItemSprite);
     }
@@ -61,13 +61,13 @@ void Breakfast::turn(Player &pl)
     if (  vect_to_pl.ModuleQuadr() < collider_size * collider_size)
     {
         Vector2D dV = 1/vect_to_pl.ModuleQuadr() * vect_to_pl; 
-        pl.velocity = pl.velocity + dV;
+        pl.velocity = pl.velocity + 5*dV;
     }
 
     if (ispicked)
     {
         float time = PickedTime.getElapsedTime().asMilliseconds();
-        if(time < 2000)
+        if(time < 1500)
         {
             ItemSprite.setPosition(pl.coord.x - 20, pl.coord.y - 80);
         }

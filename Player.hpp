@@ -40,6 +40,7 @@ public:
     sf::Sprite BodySprite;
     sf::Sprite HeadSprite;
     sf::Sprite GettingItemSprite;
+    sf::Sprite GettingDamageSprite;
 
     string BodyDirection;
     string HeadDirection;
