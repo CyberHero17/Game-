@@ -9,6 +9,8 @@
 #include "Zombie.hpp"
 #include "GlobalVariables.hpp"
 #include "Breakfast.hpp"
+#include "View.hpp"
+
 
 using std::list;
 
@@ -35,9 +37,11 @@ int main()
     
     Breakfast Br ({400,300});
 
+    r1.CreateRoom(Id, ptr, x, y);
+
     while (window.isOpen())
     {
-
+        //sf:Clock WorldClock;
         std::this_thread::sleep_for(std::chrono::milliseconds(delta_time));
         
         sf::Event event;
@@ -99,7 +103,8 @@ int main()
 
 
         window.clear(); // пошла отрисовка
-
+        r1.Draw(window);
+        window.setView(getCordsForView(Isaac.coord.x, Isaac.coord.y));
 
 
         for(auto it = Zombies.begin(); it != Zombies.end(); ++it)
@@ -119,6 +124,7 @@ int main()
         }
 
         Isaac.draw(window);
+
         //window.draw(Isaac.max_speed_Text); // SgFault
         
 

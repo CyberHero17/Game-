@@ -13,7 +13,8 @@ float y = 0;
 sf::View getCordsForView(float x, float y){
     float viewX = x;
     float viewY = y;
-    view.setCenter(r1.getMapSprite().getPosition().x + r1.getMapTexture().getSize().x/2, r1.getMapSprite().getPosition().y + r1.getMapTexture().getSize().y/2);
+    view.setCenter(/*r1.getMapSprite().getPosition().x + r1.getMapTexture().getSize().x/2*/ viewX, /*r1.getMapSprite().getPosition().y + r1.getMapTexture().getSize().y/2*/ viewY);
+    
     // std::cout << viewX;
     view.setSize(1000, 600);
     view.zoom(0.77);
