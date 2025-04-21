@@ -25,7 +25,6 @@ public:
     sf::Sprite sprite;
 public:
 
-
     Vector2D getVelocity();
     float getMaxSpeed();
     int getHealth();
@@ -36,7 +35,5 @@ public:
     virtual void death();
     virtual void turn();
     virtual void getDamage(int D);
-
-
 
 };
