@@ -72,6 +72,8 @@ Player::Player(int hp, float max_speed, float Damage, float TearsFreq, float Ran
     this->BodySprite.setTextureRect(sf::IntRect(0,32,32,32));
     this->BodySprite.setScale(2,2);
 
+    heatbox = sf::FloatRect(0, 0, 32, 64);
+
     sf::Sprite temp; 
     temp.setTexture(this->texture);
     temp.setPosition(this->coord.x, this->coord.y);
@@ -99,8 +101,7 @@ Player::Player(int hp, float max_speed, float Damage, float TearsFreq, float Ran
     temp.setTextureRect(sf::IntRect(224,64,32,32));  BodyAnimationSprites.push_back(temp);
     temp.setTextureRect(sf::IntRect(0,96,32,32));    BodyAnimationSprites.push_back(temp);
     temp.setTextureRect(sf::IntRect(32,96,32,32));   BodyAnimationSprites.push_back(temp);
-
-
+    
 }
 
 
@@ -331,10 +332,6 @@ void Player::draw(sf::RenderWindow &window)
             window.draw(this->GettingItemSprite);
         }
     }
-
-
-
-
 
     window.draw(this->CharacteristicsSprite);
 

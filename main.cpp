@@ -6,6 +6,7 @@
 #include <SFML/Graphics.hpp>
 #include "Entity.hpp"
 #include "Player.hpp"
+//#include "Player.cpp" 
 #include "Zombie.hpp"
 #include "GlobalVariables.hpp"
 #include "Breakfast.hpp"
@@ -25,7 +26,7 @@ int main()
     list<Zombie> Zombies;
 
     bool EnableInertion = 1;
-    sf::RenderWindow window(sf::VideoMode(1000, 600), "The Binding of the Isaac"); // с этой частью связана утечка приемрно в 259,467 байт
+    sf::RenderWindow window(sf::VideoMode(1000, 600), "The Pinding of the Isaac"); // с этой частью связана утечка приемрно в 259,467 байт
     int delta_time = 5;
 
     Player Isaac(5, 0.8 * delta_time, 2, 3 , 5.0f, 5, 0, 2);
@@ -36,8 +37,8 @@ int main()
     Zombie Z4(6, 0.2 * delta_time, {100,200}); Zombies.push_back(Z4);
     
     Breakfast Br ({400,300});
-
-    r1.CreateRoom(Id, ptr, x, y);
+    r1.CreateObjects();
+    r1.CreateRoom(ptr, x, y);
 
     while (window.isOpen())
     {
@@ -113,8 +114,6 @@ int main()
             window.draw(it->HeadSprite);
         }
 
-        
-        
         
         Br.draw(window);
         

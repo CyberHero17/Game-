@@ -3,13 +3,12 @@
 #include "Structures.hpp"
 #include <SFML/Graphics.hpp>
 #include <string>
+//#include "View.hpp"
 
 using std::cin;
 using std::cout;
 using std::endl;
 using std::string;
-
-
 
 class Entity
 {
@@ -23,6 +22,7 @@ public:
     Vector2D coord;
     sf::Texture texture;
     sf::Sprite sprite;
+    sf::FloatRect heatbox;
 public:
 
     Vector2D getVelocity();
