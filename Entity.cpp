@@ -1,7 +1,7 @@
 #include <iostream>
 #include "Entity.hpp"
-#include "View.hpp"
-//#include <SFML/Graphics.hpp>
+//#include "View.hpp"
+#include <SFML/Graphics.hpp>
 
 using std::cin;
 using std::cout;

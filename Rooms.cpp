@@ -2,7 +2,7 @@
 #include <memory>
 #include <experimental/random>
 #include <vector>
-std::vector<int> rooms({1,2,3,4,5,6,7,8,9});
+std::vector<char> rooms({'1','2','3','4','5','6','7','8','9'});
 int counter = 0;
 void FindWays(char** mas, int x, int y, std::vector<int>* res){
     if(mas[x-1][y] == '#' && mas[x-1] != NULL)
@@ -54,7 +54,7 @@ void makeNumOfRooms(char** mas){
                 if(rooms.size() == 0){ mas[i][j] = '#'; continue;}
                 int Iroom = std::experimental::randint(0, static_cast<int>(rooms.size())-1);
                 //std::cout << Iroom;
-                mas[i][j] = rooms[Iroom]+48; 
+                mas[i][j] = rooms[Iroom]; 
                 rooms.erase(rooms.begin() + Iroom); 
             }
         }    

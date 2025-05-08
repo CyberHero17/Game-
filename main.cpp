@@ -10,6 +10,7 @@
 #include "Zombie.hpp"
 #include "GlobalVariables.hpp"
 #include "Breakfast.hpp"
+#include "Creator.cpp"
 #include "View.hpp"
 
 
@@ -20,25 +21,33 @@ int main()
     HealthHeartsTexture.loadFromFile("Textures/Health.png");
     GettingItemTexture.loadFromFile("Textures/IsaacTexture3.png");
     
-
-
     list<Tear> Tears;
     list<Zombie> Zombies;
 
     bool EnableInertion = 1;
-    sf::RenderWindow window(sf::VideoMode(1000, 600), "The Pinding of the Isaac"); // с этой частью связана утечка приемрно в 259,467 байт
+    sf::RenderWindow window(sf::VideoMode(1000, 600), "The Pinging of the Isaac"); // с этой частью связана утечка приемрно в 259,467 байт
     int delta_time = 5;
 
     Player Isaac(5, 0.8 * delta_time, 2, 3 , 5.0f, 5, 0, 2);
 
-    Zombie Z1(6, 0.2 * delta_time, {100,200}); Zombies.push_back(Z1);
-    Zombie Z2(6, 0.2 * delta_time, {150,200}); Zombies.push_back(Z2);
-    Zombie Z3(6, 0.2 * delta_time, {200,200}); Zombies.push_back(Z3);
-    Zombie Z4(6, 0.2 * delta_time, {100,200}); Zombies.push_back(Z4);
+    Zombie Z1(6, 0.2 * delta_time, {3700,3800}); Zombies.push_back(Z1);
+    Zombie Z2(6, 0.2 * delta_time, {3750,3800}); Zombies.push_back(Z2);
+    Zombie Z3(6, 0.2 * delta_time, {3800,3800}); Zombies.push_back(Z3);
+    Zombie Z4(6, 0.2 * delta_time, {3700,3800}); Zombies.push_back(Z4);
     
-    Breakfast Br ({400,300});
-    r1.CreateObjects();
-    r1.CreateRoom(ptr, x, y);
+    Breakfast Br ({4000,3900});
+    // r1.CreateObjects();
+    // r1.CreateRoom(ptr, x, y);
+
+    Fill(vm);
+    PlaceRooms(vm, X0, Y0);
+    makeNumOfRooms(vm);
+    Place(vm);
+    Door d1(std::move("Textures/Door.png"));
+    for(auto& r : rooms){
+        d1.PlaceDoors(*r);
+    }
+
 
     while (window.isOpen())
     {
@@ -104,7 +113,13 @@ int main()
 
 
         window.clear(); // пошла отрисовка
-        r1.Draw(window);
+        //r1.Draw(window);
+
+
+        for(auto x : rooms){
+            x->Draw(window);
+        } // на этом моменте будет жёстко лагать, надо опитимизировать
+
         window.setView(getCordsForView(Isaac.coord.x, Isaac.coord.y));
 
 
@@ -123,12 +138,24 @@ int main()
         }
 
         Isaac.draw(window);
-
+        //-----------
+        Isaac.CharacteristicsSprite.setPosition(Isaac.coord.x - 360.0f, Isaac.coord.y - 220.0f);    // движение характеристик
+        int step = 0;
+        for(auto& it : Isaac.HealthConteiners){
+            it.setPosition(Isaac.coord.x - 300.0f + step * 45, Isaac.coord.y - 220.0f);
+            step++;
+        }
+        step = 0;
+        for(auto& it : Isaac.HealthHearts){
+            it.setPosition(Isaac.coord.x - 300.0f + step * 45, Isaac.coord.y - 220.0f);
+            step++;
+        }
         //window.draw(Isaac.max_speed_Text); // SgFault
         
 
         window.display();
         
     }
+    rooms.clear();
     return 0;
 }

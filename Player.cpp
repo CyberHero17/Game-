@@ -36,7 +36,7 @@ Player::Player(int hp, float max_speed, float Damage, float TearsFreq, float Ran
     for(int i = 0; i < 12; i++)
     {
         sf::Sprite HPSprite(HealthHeartsTexture);
-        HPSprite.setPosition(20 + i * 45, 20); 
+        HPSprite.setPosition(3620 + i * 45, 3620); 
         HPSprite.scale(0.8, 0.8);
         HealthHearts.push_back(HPSprite);
     }
@@ -50,7 +50,7 @@ Player::Player(int hp, float max_speed, float Damage, float TearsFreq, float Ran
     */ // проклято - почему то вызывает segmentation fault при отрисовке max_speed_Text
     this->CharacteristicsTexture.loadFromFile("Textures/Characteristics.png");
     this->CharacteristicsSprite.setTexture(this->CharacteristicsTexture);
-    this->CharacteristicsSprite.setPosition(0, 100);
+    this->CharacteristicsSprite.setPosition(3600, 3700);
     this->CharacteristicsSprite.scale(0.8,0.8);
 
 
@@ -76,6 +76,8 @@ Player::Player(int hp, float max_speed, float Damage, float TearsFreq, float Ran
 
     sf::Sprite temp; 
     temp.setTexture(this->texture);
+    this->coord.x += 3600; 
+    this->coord.y += 3600; 
     temp.setPosition(this->coord.x, this->coord.y);
     temp.scale(2,2); 
 
@@ -104,11 +106,9 @@ Player::Player(int hp, float max_speed, float Damage, float TearsFreq, float Ran
     
 }
 
-
-
 void Player::MoveInertion(sf::Event event) // что просходит с игроком в каждом кадре
 {
-    for(auto spr : this->BodyAnimationSprites) spr.setPosition(this->coord.x, this->coord.y); // спрайты анимации "ходят за Айзеком"
+    for(auto spr : this->BodyAnimationSprites) spr.setPosition(this->coord.x + 3600, this->coord.y + 3600); // спрайты анимации "ходят за Айзеком"
 
     float time = 1;
     //cout << "Player's turn" << endl;

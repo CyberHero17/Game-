@@ -9,23 +9,26 @@
 
 class Object{
 friend class Room;
-friend bool CheckCollision(sf::FloatRect& head, sf::FloatRect& slave);
+
 private:
     std::string name; 
     float x, y, width, height; 
     sf::FloatRect objRect;
 public: 
     Object(float X, float Y, float W, float H);
+    Object();
     float getX();
     float getY();
     float getWidth();
     float getHeigth();
+    sf::FloatRect getRect();
     std::string getName();
+    virtual bool CheckCollision(sf::FloatRect& pl); // Реализацию сюда
+    virtual sf::Sprite& getSprite();
     void setName(std::string n);
 };
 
 class Room{
-
 //friend class Object;
 private:
     std::string id;
@@ -34,6 +37,7 @@ private:
     sf::Texture texture;
     sf::Texture TextureRocks;
     sf::Sprite sprite;
+    //std::vector<Door> doors;
     std::vector<Object> obj; // Все дополнительные элементы на карте
     std::vector<sf::Sprite> layers; // Все дополнительные изображения
 public:
@@ -43,11 +47,28 @@ public:
     bool CreateObjects(); // x, y - начальные координаты комнаты. Ставим объекты, но не отрисовываем их 
 
     // гетеры, сетеры
-    std::vector<Object> getObj(); // вектор obj
+    std::vector<Object>& getObj(); // вектор obj
+    //std::vector<Door>& getDoors(); // вектор doors
     void LoadTextureFromFile(std::string filename);
     void setSpriteTexture();
+    std::vector<sf::Sprite>& getLayers();
 
+    int getWidth();
+    int getHeight();
     sf::Sprite getMapSprite();
     sf::Texture getMapTexture();
     char getRoomId();
+};
+
+
+class Door : public Object{
+
+private: 
+    sf::Sprite sprite;
+    sf::Texture texture;
+public:
+    Door(std::string filename);
+    sf::Sprite& getSprite();
+    bool CheckCollision(sf::FloatRect& d) override;
+    bool PlaceDoors(Room& r); // Расставляем картинки дверей 
 };
