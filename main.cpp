@@ -10,7 +10,7 @@
 #include "Zombie.hpp"
 #include "GlobalVariables.hpp"
 #include "Breakfast.hpp"
-#include "Creator.cpp"
+#include "Creator.hpp"
 #include "View.hpp"
 
 
@@ -43,10 +43,12 @@ int main()
     PlaceRooms(vm, X0, Y0);
     makeNumOfRooms(vm);
     Place(vm);
-    Door d1(std::move("Textures/Door.png"));
-    for(auto& r : rooms){
-        d1.PlaceDoors(*r);
-    }
+    ConnectRm(vm);
+
+    //Door d1(std::move("Textures/Door.png"));
+    // for(auto& r : rooms){
+    //     r->PlaceDoors();
+    // }
 
 
     while (window.isOpen())
@@ -114,11 +116,11 @@ int main()
 
         window.clear(); // пошла отрисовка
         //r1.Draw(window);
-
-
-        for(auto x : rooms){
+        
+        for(auto& x : rooms){
             x->Draw(window);
-        } // на этом моменте будет жёстко лагать, надо опитимизировать
+            //x->Teleport(Isaac);
+        } 
 
         window.setView(getCordsForView(Isaac.coord.x, Isaac.coord.y));
 

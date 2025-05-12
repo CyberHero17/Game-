@@ -33,29 +33,58 @@ float Object::getHeigth(){
     return this->height;
 };
 
+void Object::setX(float x){
+    this->x = x;
+}
+void Object::setY(float y){
+    this->y = y;
+}
+void Object::setWidth(float w){
+    this->width = w;
+}
+void Object::setHeight(float h){
+    this->height = h;
+}
+
 std::string Object::getName(){
     return this->name;
 };
-sf::FloatRect Object::getRect(){
+sf::FloatRect& Object::getRect(){
     return this->objRect;
 };
 
 Door::Door(std::string filename){
+
     texture.loadFromFile(filename);
     sprite.setTexture(texture);
 };
-bool Door::CheckCollision(sf::FloatRect& d){
-    return this->getRect().intersects(d);
-};
 
+/*Door::Door(std::string filename, float X, float Y, float W, float H){
+    texture.loadFromFile(filename);
+    sprite.setTexture(texture);
+    x = X;
+    y = Y;
+    width = W;
+    height = H;
+    objRect = sf::FloatRect(x, y, width, height);
+
+};*/
 bool Object::CheckCollision(sf::FloatRect& slave){
+    // std::cout << "I'm object";
     return false;
 };
+
+bool Door::CheckCollision(sf::FloatRect& d){
+    return this->getRect().intersects(d, this->getRect());
+};
+
 sf::Sprite& Object::getSprite(){
     sf::Sprite sp;
     return sp;
 };
+
 sf::Sprite& Door::getSprite(){
+    //std::cout << "I'm from door";
     return this->sprite;
 };
 
@@ -66,7 +95,7 @@ Room::Room(std::string ID){ // Пустая карта
     height = 0;
     id = ID;
 }
-std::vector<Object>& Room::getObj(){
+std::vector<Object*>& Room::getObj(){
     return obj;
 };
 int Room::getHeight(){
@@ -87,9 +116,6 @@ sf::Sprite Room::getMapSprite(){
 sf::Texture Room::getMapTexture(){
     return this->texture;
 };
-/*std::vector<Door>& Room::getDoors(){
-    return this->doors;
-};*/
 char Room::getRoomId(){
     return static_cast<char>(id[0]);
 };
@@ -109,7 +135,6 @@ bool Room::CreateObjects(){
     //std::cout << root;
     tinyxml2::XMLElement* m = data.FirstChildElement("map");
     tinyxml2::XMLElement* og = m->FirstChildElement("objectgroup"); 
-    //std::cout << og->Attribute("id");
     tinyxml2::XMLElement* o = og->FirstChildElement("object");
     //Считаем объекты 
     while(o){
@@ -122,14 +147,63 @@ bool Room::CreateObjects(){
         if(o->Attribute("name") != nullptr){
             Name = (std::string)(o->Attribute("name"));
         } 
-
-        Object item(Xo, Yo, WIDTH, HEIGHT);
-        item.setName(Name);
+        if(Name[0] != 's'){
+            Object* item = new Door(std::move("Textures/Door.png")/*, Xo, Yo, WIDTH, HEIGHT*/);
+            item->setX(Xo);
+            item->setY(Yo);
+            item->setWidth(WIDTH);
+            item->setHeight(HEIGHT);
+            item->getRect() = sf::FloatRect(Xo, Yo, WIDTH, HEIGHT);
+            item->setName(Name);
+            this->obj.push_back(item);
+            o = o->NextSiblingElement("object");
+            continue;
+        }
+        
+        Object* item = new Object(Xo, Yo, WIDTH, HEIGHT);
+        item->setName(Name);
         this->obj.push_back(item);
+        
         o = o->NextSiblingElement("object");
     };
-    std::cout << obj[obj.size()-1].getName();
+    //std::cout << obj[obj.size()-1]->getName();
     std::cout << "Object ----> Success";
+    return true;
+};
+
+
+bool Room::PlaceDoors(){
+    //std::cout << this->getLayers().size();
+    for(auto& x : this->getObj()){
+        if(x->getName()[0] == 's') continue;
+        sf::Sprite scopy = x->getSprite();
+        float Wid = x->getWidth();
+        float Hei = x->getHeigth();
+        float Xr = x->getX();
+        float Yr = x->getY();
+
+        if(x->getName() == "ldoor"){
+            scopy.setPosition(Xr, Yr + Hei);
+            scopy.rotate(-90);
+            std::cout << Xr << "," << Yr;
+            this->layers.push_back(scopy);
+        }
+        if(x->getName() == "rdoor"){
+            scopy.setPosition(Xr+Wid, Yr);
+            scopy.rotate(90);
+            this->layers.push_back(scopy);
+        }
+        if(x->getName() == "udoor"){
+            scopy.setPosition(Xr+Wid, Yr);
+            this->layers.push_back(scopy);
+        }
+        if(x->getName() == "ddoor"){
+            scopy.setPosition(Xr + Wid, Yr + 1.38f*Hei);
+            scopy.rotate(180);
+            this->layers.push_back(scopy);
+        }
+    }
+    //std::cout << '\n' << this->getLayers().size();
     return true;
 };
 
@@ -152,8 +226,7 @@ void Room::CreateRoom(Room* ptrr, float x, float y){
     ptrr->width = atoi(mptr->Attribute("width")); // Размер карты в тайлах
     ptrr->height = atoi(mptr->Attribute("height"));
 
-    // int tilemapwidth = atoi(data.FirstChildElement("map")->Attribute("width"));
-    // int tilemapheight = atoi(data.FirstChildElement("map")->Attribute("height"));
+
 
     tinyxml2::XMLElement* tileset;
     tileset = mptr->FirstChildElement("tileset");
@@ -167,8 +240,7 @@ void Room::CreateRoom(Room* ptrr, float x, float y){
     
     tinyxml2::XMLElement* ptrI;
     ptrI = maptile->FirstChildElement("image"); // Указываем на Image 
-    //ptrr->width = atoi(ptrI->Attribute("width")); // 720
-    //ptrr->height = atoi(ptrI->Attribute("height"));
+    
     const std::string imagepath = strg1 + (std::string)ptrI->Attribute("source");
     if(!ptrr->texture.loadFromFile(imagepath)){
         std::cout << "SMTH WRONG WITH IMAGE of MAP";
@@ -183,7 +255,7 @@ void Room::CreateRoom(Room* ptrr, float x, float y){
 
    
     tinyxml2::XMLElement* Tptr = mptr->FirstChildElement("tileset")->NextSiblingElement("tileset"); // Указываем на файлик с картинками тайлов
-    int firstgid = atoi(Tptr->Attribute("firstgid"));  // Айдишник первого элемента
+    int firstgid = atoi(Tptr->Attribute("firstgid"));                                               // Айдишник первого элемента
     std::string ObjectImSource = strg1 + Tptr->Attribute("source");
 
     // open file with images of objects properties
@@ -195,20 +267,18 @@ void Room::CreateRoom(Room* ptrr, float x, float y){
         std::cout << "CANT DOWNLOAD TEXTURE";
         return;
     };
-    //sf::Sprite SpriteRocks;
-    //SpriteRocks.setTexture(TextureRocks);
+    
     
     // Ширина и высота картинки с тайлами в пикселях 
     int width = atoi(im->Attribute("width")); 
     int height = atoi(im->Attribute("height"));
-    //std::cout << width;
-    // Далее ищем по указателю нужный слой (Tile Layer 2)
+    
     tinyxml2::XMLElement* plr;
     plr = mptr->FirstChildElement("layer");
     while((std::string)plr->Attribute("name") != "Tile Layer 2"){
         plr = plr->NextSiblingElement("layer");
     }
-    //std::cout << (std::string)(plr->Attribute("name"));
+
     //=================== Далее создаём первую половину всех объектов на карте - их изображения
     std::vector<sf::Sprite> v;
     TextureRocks.setSmooth(true);
@@ -220,9 +290,6 @@ void Room::CreateRoom(Room* ptrr, float x, float y){
             v.push_back(spr);
         }
     
-    // till this moment all the textures is set    
-    // now we should create and place all the objects 
-    // Сначала картинки, затем объекты solid
     tinyxml2::XMLElement* ptl = plr->FirstChildElement("data")->FirstChildElement("tile");
     for(int i = 0; i < ptrr->height; ++i)
         for(int j = 0; j < ptrr->width; ++j){
@@ -237,47 +304,20 @@ void Room::CreateRoom(Room* ptrr, float x, float y){
         }   
     // Всё, есть спрайты всех объектов на карте
     CreateObjects();
+    PlaceDoors();
     std::cout << "Success ---->" + id << '\n';
 };
 
-bool Door::PlaceDoors(Room& r){
-    //dstd::cout << r.getLayers().size() << "++++";
-    for(auto& x : r.getObj()){
-        sf::Sprite scopy = this->getSprite();
-        float Wid = x.getWidth();
-        float Hei = x.getHeigth();
-        float Xr = x.getX();
-        float Yr = x.getY();
-        if(x.getName() == "ldoor"){
-            scopy.setPosition(Xr, Yr + Hei);
-            scopy.rotate(-90);
-            r.getLayers().push_back(scopy);
-        }
-        if(x.getName() == "rdoor"){
-            scopy.setPosition(Xr+Wid, Yr);
-            scopy.rotate(90);
-            r.getLayers().push_back(scopy);
-        }
-        if(x.getName() == "udoor"){
-            scopy.setPosition(Xr+Wid, Yr);
-            
-            r.getLayers().push_back(scopy);
-        }
-        if(x.getName() == "ddoor"){
-            scopy.setPosition(Xr + Wid, Yr + 1.38f*Hei);
-            scopy.rotate(180);
-            r.getLayers().push_back(scopy);
-        }
-    }
-    return true;
-};
+
 std::vector<sf::Sprite>& Room::getLayers(){
     return layers;
 }
+
 void Room::Draw(sf::RenderWindow& window){ 
     
     window.draw(this->sprite);
     for(int i = 0; i < static_cast<int>(layers.size()); ++i){
-        window.draw(layers[i]);  // все натыканные элементы на картe
+        window.draw(layers[i]);                                             // все натыканные элементы на картe
+        //std::cout << layers[i].getTexture()->getSize().x<<'\n';
     }
 };

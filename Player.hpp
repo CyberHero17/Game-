@@ -33,6 +33,8 @@ public:
 
     float TearMass;
     float time_invicibility;
+    
+    std::string roomId = "0";
 
     sf::Texture CharacteristicsTexture;
     sf::Sprite CharacteristicsSprite;
@@ -54,7 +56,6 @@ public:
     list<sf::Sprite> HealthConteiners; 
     list<sf::Sprite> HealthHearts; 
     
-
     vector<sf::Sprite> BodyAnimationSprites;
 
     Player(int hp, float max_speed, float Damage, float TearsFreq, float Range, float ShotSpeed, float Luck, float TearMass);

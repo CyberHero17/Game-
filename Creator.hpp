@@ -8,11 +8,15 @@ typedef std::vector<std::vector<char>> Vec2D;
 int X0 = 5;
 int Y0 = 5;
 
-std::vector<Room*> rooms; // Вектор с 10 комнатами, которые будут на карте
+std::vector<Room*> rooms;                                      // Вектор с 10 комнатами, которые будут на карте
+std::map<char, std::string> nexus;                             // пара номер номер комнаты - ее соседи
+
+std::map<char, int> decode = {{'l', 0}, {'u', 1}, {'r', 2}, {'d', 3}};
+
 
 
 int counter = 0;
-Vec2D vm(11, std::vector<char>(11)); // Может сгодиться для мини-карты 
+Vec2D vm(11, std::vector<char>(11));                           // Может сгодиться для мини-карты 
 
 void Fill(Vec2D& vm){
     for(auto& x : vm)
@@ -51,12 +55,9 @@ void ChooseRandWays(std::vector<int>& arr){ // arr = {0, 1, 0, 1}
     int randInd = std::experimental::randint(0, (int)Ione.size()-1);
     Ione.erase(randInd + Ione.begin());
 
-    //for(int i = 0; i<4; i++)  std::cout <<(*arr)[i] << '-';
-
     for(int i = 0; i<4; i++) arr[i] = 0;
     for(int i = 0; i<Ione.size(); i++) arr[Ione[i]] = 1;  
-    //for(int i = 0; i<4; i++)  std::cout <<(*arr)[i] << '-';
-    //Show();
+    
 };
 void PlaceRooms(Vec2D& mas, int x, int y){ // x - строчка, y - столбец
     std::vector<int> ways{0, 0, 0, 0};
@@ -102,7 +103,77 @@ bool Place(Vec2D& vm){
     std::cout << "rooms ---> success" << rooms.size();
     return true;
 };
+void ConnectRm(Vec2D& vm){
+    for(int i = 0; i < 11; i++){
+        for(int j = 0; j < 11; ++j){
+            if(vm[i][j] != '#'){
+                if(vm[i][j-1] != '#')                                               // left
+                    nexus[vm[i][j]].push_back(vm[i][j-1]);
+                else
+                    nexus[vm[i][j]].push_back('#');
 
+                if(vm[i-1][j] != '#')                                               // up
+                    nexus[vm[i][j]].push_back(vm[i-1][j]);
+                else
+                    nexus[vm[i][j]].push_back('#');
 
+                if(vm[i][j+1] != '#')                                               // right
+                    nexus[vm[i][j]].push_back(vm[i][j+1]);
+                else
+                    nexus[vm[i][j]].push_back('#');  
+                
+                if(vm[i+1][j] != '#')                                               // down
+                    nexus[vm[i][j]].push_back(vm[i+1][j]);
+                else
+                    nexus[vm[i][j]].push_back('#');  
+            }
+        }
+    }
 
+};
+Room* FindRm(std::string id){
+    Room* pr;
+    for(auto& x : rooms){
+        std::string s;
+        s.push_back(x->getRoomId());
+        if(s  == id){
+            pr = x;
+        }
+    }
+    return pr;
+};
 
+Object& FindDr(Room* r, char dr){
+    for(auto& o : r->getObj()){
+        if(o->getName()[0] == dr)
+            return (*o);
+    }
+    throw 1;
+};
+
+void Room::Teleport(Player& p){
+    sf::FloatRect prect = sf::FloatRect(p.coord.x, p.coord.y, 24.0f, 48.0f);
+    std::string id = p.roomId;
+    char idc = id[0];
+    for(auto& obj : this->getObj()){
+        if(obj->getName()[0] != 's'){
+            
+            int ind = decode[obj->getName()[0]];
+            std::cout << obj->CheckCollision(prect);
+            
+            if(obj->CheckCollision(prect) && nexus[idc][ind] != '#'){
+                std::cout << obj->getName()[0];
+
+                std::cout << "intersects";
+                char dest = nexus[idc][ind];
+                std::string dests; 
+                dests.push_back(dest);
+                Room* rm = FindRm(dests);
+                Object d = FindDr(rm, dest);
+                p.coord = {d.getX(), d.getY()};
+                p.roomId = dests;   
+                return;
+            }
+        }        
+    }
+};
