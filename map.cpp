@@ -49,7 +49,11 @@ void Object::setHeight(float h){
 std::string Object::getName(){
     return this->name;
 };
+void Object::setRect(sf::FloatRect f){
+    this->objRect = f;
+};
 sf::FloatRect& Object::getRect(){
+    
     return this->objRect;
 };
 
@@ -59,23 +63,14 @@ Door::Door(std::string filename){
     sprite.setTexture(texture);
 };
 
-/*Door::Door(std::string filename, float X, float Y, float W, float H){
-    texture.loadFromFile(filename);
-    sprite.setTexture(texture);
-    x = X;
-    y = Y;
-    width = W;
-    height = H;
-    objRect = sf::FloatRect(x, y, width, height);
-
-};*/
 bool Object::CheckCollision(sf::FloatRect& slave){
     // std::cout << "I'm object";
     return false;
 };
 
 bool Door::CheckCollision(sf::FloatRect& d){
-    return this->getRect().intersects(d, this->getRect());
+    //std::cout << '{'<< this->getRect().getSize().x << ", " << this->getRect().getSize().y << '}';
+    return this->getRect().intersects(d);
 };
 
 sf::Sprite& Object::getSprite(){
@@ -148,12 +143,12 @@ bool Room::CreateObjects(){
             Name = (std::string)(o->Attribute("name"));
         } 
         if(Name[0] != 's'){
-            Object* item = new Door(std::move("Textures/Door.png")/*, Xo, Yo, WIDTH, HEIGHT*/);
+            Object* item = new Door(std::move("Textures/Door.png"));
             item->setX(Xo);
             item->setY(Yo);
             item->setWidth(WIDTH);
             item->setHeight(HEIGHT);
-            item->getRect() = sf::FloatRect(Xo, Yo, WIDTH, HEIGHT);
+            item->setRect(sf::FloatRect(Xo, Yo, WIDTH, HEIGHT));
             item->setName(Name);
             this->obj.push_back(item);
             o = o->NextSiblingElement("object");
@@ -231,7 +226,7 @@ void Room::CreateRoom(Room* ptrr, float x, float y){
     tinyxml2::XMLElement* tileset;
     tileset = mptr->FirstChildElement("tileset");
     std::string TISource = tileset->Attribute("source"); // Map Image source 
-    //std::cout << TISource;
+    
    //======== Open *.tsx
     tinyxml2::XMLDocument tileMapsource;
     tileMapsource.LoadFile(((strg1 + TISource).c_str()));
@@ -253,7 +248,6 @@ void Room::CreateRoom(Room* ptrr, float x, float y){
     // till this moment texture of room if already downloaded 
     // Work with objects on map 
 
-   
     tinyxml2::XMLElement* Tptr = mptr->FirstChildElement("tileset")->NextSiblingElement("tileset"); // Указываем на файлик с картинками тайлов
     int firstgid = atoi(Tptr->Attribute("firstgid"));                                               // Айдишник первого элемента
     std::string ObjectImSource = strg1 + Tptr->Attribute("source");
@@ -267,7 +261,6 @@ void Room::CreateRoom(Room* ptrr, float x, float y){
         std::cout << "CANT DOWNLOAD TEXTURE";
         return;
     };
-    
     
     // Ширина и высота картинки с тайлами в пикселях 
     int width = atoi(im->Attribute("width")); 
@@ -314,7 +307,6 @@ std::vector<sf::Sprite>& Room::getLayers(){
 }
 
 void Room::Draw(sf::RenderWindow& window){ 
-    
     window.draw(this->sprite);
     for(int i = 0; i < static_cast<int>(layers.size()); ++i){
         window.draw(layers[i]);                                             // все натыканные элементы на картe

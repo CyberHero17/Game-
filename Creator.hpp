@@ -9,11 +9,10 @@ int X0 = 5;
 int Y0 = 5;
 
 std::vector<Room*> rooms;                                      // Вектор с 10 комнатами, которые будут на карте
-std::map<char, std::string> nexus;                             // пара номер номер комнаты - ее соседи
+std::map<char, std::string> nexus;       //{1, 1#27}                      // пара номер номер комнаты - ее соседи
 
 std::map<char, int> decode = {{'l', 0}, {'u', 1}, {'r', 2}, {'d', 3}};
-
-
+std::map<int, char> code = {{0, 'l'}, {1, 'u'}, {2, 'r'}, {3, 'd' }};
 
 int counter = 0;
 Vec2D vm(11, std::vector<char>(11));                           // Может сгодиться для мини-карты 
@@ -129,14 +128,14 @@ void ConnectRm(Vec2D& vm){
             }
         }
     }
-
+    //std::cout << nexus['0'] << '\n';
 };
 Room* FindRm(std::string id){
     Room* pr;
     for(auto& x : rooms){
         std::string s;
         s.push_back(x->getRoomId());
-        if(s  == id){
+        if(s == id){
             pr = x;
         }
     }
@@ -144,8 +143,10 @@ Room* FindRm(std::string id){
 };
 
 Object& FindDr(Room* r, char dr){
-    for(auto& o : r->getObj()){
-        if(o->getName()[0] == dr)
+    int ind = 0;
+    decode[dr] > 1 ? ind = decode[dr] - 2 : ind = decode[dr];
+    for(auto o : r->getObj()){
+        if(o->getName()[0] == code[ind])
             return (*o);
     }
     throw 1;
@@ -155,16 +156,13 @@ void Room::Teleport(Player& p){
     sf::FloatRect prect = sf::FloatRect(p.coord.x, p.coord.y, 24.0f, 48.0f);
     std::string id = p.roomId;
     char idc = id[0];
-    for(auto& obj : this->getObj()){
+    for(auto obj : this->getObj()){
         if(obj->getName()[0] != 's'){
             
             int ind = decode[obj->getName()[0]];
-            std::cout << obj->CheckCollision(prect);
             
             if(obj->CheckCollision(prect) && nexus[idc][ind] != '#'){
-                std::cout << obj->getName()[0];
-
-                std::cout << "intersects";
+                // std::cout << obj->getName()[0];
                 char dest = nexus[idc][ind];
                 std::string dests; 
                 dests.push_back(dest);
@@ -176,4 +174,5 @@ void Room::Teleport(Player& p){
             }
         }        
     }
+    //std::cout << '\n';
 };

@@ -29,6 +29,7 @@ public:
     void setHeight(float h);
 
     sf::FloatRect& getRect();
+    void setRect(sf::FloatRect f);
     std::string getName();
     virtual bool CheckCollision(sf::FloatRect& pl); // Реализацию сюда
     virtual sf::Sprite& getSprite();
@@ -79,7 +80,6 @@ private:
     sf::Texture texture;
 public:
     Door(std::string filename);
-    //Door(std::string filename, float X, float Y, float W, float H);
     sf::Sprite& getSprite();
     bool CheckCollision(sf::FloatRect& d);    
 };

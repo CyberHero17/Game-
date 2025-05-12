@@ -119,7 +119,7 @@ int main()
         
         for(auto& x : rooms){
             x->Draw(window);
-            //x->Teleport(Isaac);
+            if(x->getRoomId() == Isaac.roomId[0]) x->Teleport(Isaac);
         } 
 
         window.setView(getCordsForView(Isaac.coord.x, Isaac.coord.y));
