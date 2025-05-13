@@ -39,7 +39,7 @@ public:
 class Room{
 friend class Object;
 private:
-    std::string id;
+    int id;
     int width, height;                                                  // Размер картинки карты в пикселях  
     float X, Y;                                                         // Координаты спрайта 
     sf::Texture texture;
@@ -49,7 +49,7 @@ private:
     std::vector<Object*> obj;                                           // Все дополнительные элементы на карте
     std::vector<sf::Sprite> layers;                                     // Все дополнительные изображения
 public:
-    Room(std::string ID);
+    Room(int ID);
     void Draw(sf::RenderWindow& window);
     void CreateRoom(Room* ptrr, float x, float y);                      // Создание комнаты с таким айдишником (Это основная функция)
     bool CreateObjects();                                               // x, y - начальные координаты комнаты. Ставим объекты, но не отрисовываем их 
@@ -67,7 +67,7 @@ public:
     int getHeight();
     sf::Sprite getMapSprite();
     sf::Texture getMapTexture();
-    char getRoomId();
+    int getRoomId();
 };
 
 

@@ -9,7 +9,7 @@ int X0 = 5;
 int Y0 = 5;
 
 std::vector<Room*> rooms;                                      // Вектор с 10 комнатами, которые будут на карте
-std::map<char, std::string> nexus;       //{1, 1#27}                      // пара номер номер комнаты - ее соседи
+std::map<int, std::string> nexus;       //{1, 1#27}                      // пара номер номер комнаты - ее соседи
 
 std::map<char, int> decode = {{'l', 0}, {'u', 1}, {'r', 2}, {'d', 3}};
 std::map<int, char> code = {{0, 'l'}, {1, 'u'}, {2, 'r'}, {3, 'd' }};
@@ -91,8 +91,7 @@ bool Place(Vec2D& vm){
     for(int i = 0; i < 11; i++){
         for(int j = 0; j < 11; ++j){
             if(vm[i][j] != '#'){
-                std::string c;
-                c.push_back(vm[i][j]);
+                int c = vm[i][j] - 48;
                 Room* r = new Room(c);
                 r->CreateRoom(r, 720*j, 720*i);
                 rooms.push_back(r);
@@ -107,34 +106,33 @@ void ConnectRm(Vec2D& vm){
         for(int j = 0; j < 11; ++j){
             if(vm[i][j] != '#'){
                 if(vm[i][j-1] != '#')                                               // left
-                    nexus[vm[i][j]].push_back(vm[i][j-1]);
+                    nexus[vm[i][j]-48].push_back(vm[i][j-1]);
                 else
-                    nexus[vm[i][j]].push_back('#');
+                    nexus[vm[i][j]-48].push_back('#');
 
                 if(vm[i-1][j] != '#')                                               // up
-                    nexus[vm[i][j]].push_back(vm[i-1][j]);
+                    nexus[vm[i][j]-48].push_back(vm[i-1][j]);
                 else
-                    nexus[vm[i][j]].push_back('#');
+                    nexus[vm[i][j]-48].push_back('#');
 
                 if(vm[i][j+1] != '#')                                               // right
-                    nexus[vm[i][j]].push_back(vm[i][j+1]);
+                    nexus[vm[i][j]-48].push_back(vm[i][j+1]);
                 else
-                    nexus[vm[i][j]].push_back('#');  
+                    nexus[vm[i][j]-48].push_back('#');  
                 
                 if(vm[i+1][j] != '#')                                               // down
-                    nexus[vm[i][j]].push_back(vm[i+1][j]);
+                    nexus[vm[i][j]-48].push_back(vm[i+1][j]);
                 else
-                    nexus[vm[i][j]].push_back('#');  
+                    nexus[vm[i][j]-48].push_back('#');  
             }
         }
     }
-    //std::cout << nexus['0'] << '\n';
+    //std::cout << nexus[1] << '\n';
 };
-Room* FindRm(std::string id){
+Room* FindRm(int id){
     Room* pr;
     for(auto& x : rooms){
-        std::string s;
-        s.push_back(x->getRoomId());
+        int s = x->getRoomId();
         if(s == id){
             pr = x;
         }
@@ -143,36 +141,45 @@ Room* FindRm(std::string id){
 };
 
 Object& FindDr(Room* r, char dr){
-    int ind = 0;
-    decode[dr] > 1 ? ind = decode[dr] - 2 : ind = decode[dr];
-    for(auto o : r->getObj()){
-        if(o->getName()[0] == code[ind])
+    int ind;
+    std::cout << dr << '\n';
+    if(decode[dr] > 1) ind = decode[dr] - 2;
+    else ind = decode[dr]+2;
+    for(auto& o : r->getObj()){
+        if(o->getName()[0] == code[ind]){
+            //std::cout << ind << '\n';
             return (*o);
+        }
     }
     throw 1;
 };
 
 void Room::Teleport(Player& p){
-    sf::FloatRect prect = sf::FloatRect(p.coord.x, p.coord.y, 24.0f, 48.0f);
-    std::string id = p.roomId;
-    char idc = id[0];
+    if(p.Teletime.getElapsedTime().asSeconds() < 1){
+        return;
+    }
+    sf::FloatRect prect = sf::FloatRect(p.coord.x + 8, p.coord.y+16, 16.0f, 16.0f);
+    int id = p.roomId;
+
     for(auto obj : this->getObj()){
         if(obj->getName()[0] != 's'){
             
             int ind = decode[obj->getName()[0]];
-            
-            if(obj->CheckCollision(prect) && nexus[idc][ind] != '#'){
-                // std::cout << obj->getName()[0];
-                char dest = nexus[idc][ind];
-                std::string dests; 
-                dests.push_back(dest);
-                Room* rm = FindRm(dests);
-                Object d = FindDr(rm, dest);
+            if(obj->CheckCollision(prect) && nexus[id][ind] != '#'){
+                
+                char dest = nexus[id][ind];
+                //std::cout << "====" <<dest;
+                Room* rm = FindRm(dest-48);
+                Object d = FindDr(rm, obj->getName()[0]);
                 p.coord = {d.getX(), d.getY()};
-                p.roomId = dests;   
+                p.roomId = dest-48; 
+                p.Teletime.restart();  
                 return;
             }
         }        
     }
-    //std::cout << '\n';
 };
+
+
+
+//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 - token
