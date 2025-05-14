@@ -82,7 +82,7 @@ sf::Sprite& Door::getSprite(){
     return this->sprite;
 };
 
-Room::Room(std::string ID){ // Пустая карта 
+Room::Room(int ID){ // Пустая карта 
     X = 0;
     Y = 0;
     width = 0;
@@ -97,7 +97,7 @@ int Room::getHeight(){
 };
 int Room::getWidth(){
     return width;
-}
+};
 void Room::LoadTextureFromFile(std::string filename){
     this->texture.loadFromFile(filename);
 };
@@ -110,15 +110,15 @@ sf::Sprite Room::getMapSprite(){
 sf::Texture Room::getMapTexture(){
     return this->texture;
 };
-char Room::getRoomId(){
-    return static_cast<char>(id[0]);
+int Room::getRoomId(){
+    return id;
 };
 
 bool Room::CreateObjects(){
 
     std::string strg1 = "Textures/TypesOfRooms/";
-    
-    std::string strg = strg1 + id + ".tmx";
+    char Id = id + 48;
+    std::string strg = strg1 + Id + ".tmx";
     tinyxml2::XMLDocument data;
     data.LoadFile(strg.c_str());
     tinyxml2::XMLNode* root = data.FirstChild();
@@ -141,7 +141,7 @@ bool Room::CreateObjects(){
         if(o->Attribute("name") != nullptr){
             Name = (std::string)(o->Attribute("name"));
         } 
-        std::cout << Name << " " << WIDTH << " " << HEIGHT << '\n';
+
         if(Name[0] != 's'){
             Object* item = new Door(std::move("Textures/Door.png"));
             item->setX(Xo);
@@ -152,13 +152,13 @@ bool Room::CreateObjects(){
             item->setName(Name);
             this->obj.push_back(item);
             o = o->NextSiblingElement("object");
+            
             continue;
         }
         
         Object* item = new Object(Xo, Yo, WIDTH, HEIGHT);
         item->setName(Name);
         this->obj.push_back(item);
-        
         o = o->NextSiblingElement("object");
     };
     //std::cout << obj[obj.size()-1]->getName();
@@ -176,7 +176,7 @@ bool Room::PlaceDoors(){
         float Hei = x->getHeigth();
         float Xr = x->getX();
         float Yr = x->getY();
-
+        //std::cout << Xr << ' ' << Yr;
         if(x->getName() == "ldoor"){
             scopy.setPosition(Xr, Yr + Hei);
             scopy.rotate(-90);
@@ -205,9 +205,10 @@ bool Room::PlaceDoors(){
 void Room::CreateRoom(Room* ptrr, float x, float y){
     
     std::string strg1 = "Textures/TypesOfRooms/";
+    char Id = id + 48;
     
-    std::string strg = strg1 + id + ".tmx";
-
+    std::string strg = strg1 + Id + ".tmx";
+    //std::cout << strg;
     tinyxml2::XMLDocument data;
     data.LoadFile(strg.c_str());
     tinyxml2::XMLNode* root = data.FirstChild();
@@ -298,7 +299,7 @@ void Room::CreateRoom(Room* ptrr, float x, float y){
     // Всё, есть спрайты всех объектов на карте
     CreateObjects();
     PlaceDoors();
-    std::cout << "Success ---->" + id << '\n';
+    std::cout << "Success ---->"<< id << '\n';
 };
 
 

@@ -18,4 +18,4 @@ sf::View getCordsForView(float x, float y){
     view.setSize(1000, 600);
     view.zoom(0.77);
     return view;
-}
+};

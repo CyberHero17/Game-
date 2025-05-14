@@ -35,7 +35,7 @@ public:
     float TearMass;
     float time_invicibility;
     
-    std::string roomId = "0";
+    int roomId = 0;
 
     sf::Texture CharacteristicsTexture;
     sf::Sprite CharacteristicsSprite;
@@ -51,7 +51,7 @@ public:
     sf::Clock damage_time;
     sf::Clock body_time;
     sf::Clock GettingItemTime;
-
+    sf::Clock Teletime;
 
     bool GettingItem;
     list<sf::Sprite> HealthConteiners; 
