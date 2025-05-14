@@ -6,7 +6,8 @@
 #include "Player.hpp"
 #include <string>
 #include "tinyxml2.h"
-#include "tinyxml2.cpp"
+//#include "tinyxml2.cpp"
+class Player;
 
 class Object{
 friend class Room;

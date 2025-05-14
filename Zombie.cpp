@@ -5,6 +5,11 @@
 
 Zombie::Zombie(int hp, float max_speed, Vector2D coord)
 {
+    SizeX = 32;
+    SizeY = 32;
+    this->heatbox.width = SizeX * 1.1;
+    this->heatbox.height = SizeY * 1.4;
+
     dV = {0,0};
     BodyDirection = "Down";
     this->mass = 3;
@@ -19,16 +24,17 @@ Zombie::Zombie(int hp, float max_speed, Vector2D coord)
     this->texture.loadFromFile("Textures/Zombie_textures.png");
     this->HeadSprite.setTexture(this->texture);
     this->HeadSprite.setTextureRect(sf::IntRect(0,0,32,32));
-    this->HeadSprite.setScale(2,2);
+    this->HeadSprite.setScale(SizeX/20,SizeY/20);
+    
     
     this->BodySprite.setTexture(this->texture);
     this->BodySprite.setTextureRect(sf::IntRect(0,32,32,32));
-    this->BodySprite.setScale(2,2);
+    this->HeadSprite.setScale(SizeX/20,SizeY/20);
 
     sf::Sprite temp; 
     temp.setTexture(this->texture);
     temp.setPosition(this->coord.x, this->coord.y);
-    temp.scale(2,2); 
+    temp.scale(SizeX/20,SizeY/20); 
 
     temp.setTextureRect(sf::IntRect(192,0,32,32));   BodyAnimationSprites.push_back(temp);
     temp.setTextureRect(sf::IntRect(224,0,32,32));   BodyAnimationSprites.push_back(temp);
@@ -59,7 +65,7 @@ Zombie::Zombie(int hp, float max_speed, Vector2D coord)
 
 
 
-void Zombie::MoveInertion(Player &pl)
+void Zombie::MoveInertion(Player &pl, vector<Room*>& rooms)
 {
     float time = 1;
     this->dV = {0,0};
@@ -111,14 +117,65 @@ void Zombie::MoveInertion(Player &pl)
         BodyDirection = "Up";
     }
 
-    this->coord = this->coord + this->velocity * time;
-    this->HeadSprite.setPosition({this->coord.x - 16, this->coord.y - 32} );
-    if(this->BodyDirection != "Left") this->BodySprite.setPosition({this->coord.x - 16, this->coord.y + 20 - 32} ); // -16 и -32 чтобы спрайт рисовался не в угле а в центре
-    if(this->BodyDirection == "Left") this->BodySprite.setPosition({this->coord.x - 16 + 64, this->coord.y + 20 - 32} ); // +64 и +20 - чтобы тело и голова были связаны
+    this->coord.x = this->coord.x + this->velocity.x * time;
+    this->heatbox.left = this->coord.x - (int)(SizeX * 0.5);
+    
+    int trig = 0;
+    for(auto& RoomPointer :  rooms)
+    {
+        if(trig == 1) break;
+
+        for( auto& ObjectPointer : RoomPointer->getObj() )
+        {
+            if( ObjectPointer->getName() == "solid" )
+            {
+                if( this->heatbox.intersects(ObjectPointer->getRect()))
+                {
+                    this->coord.x = this->coord.x - this->velocity.x * time;
+                    this->velocity.x = 0;
+                    this->heatbox.left = this->coord.x - (int)(SizeX * 0.5);
+                    cout << "Wall X\n";
+                    trig = 1;
+                    break;
+                }
+            }
+        }
+    }
+
+
+    this->coord.y = this->coord.y + this->velocity.y * time;
+    this->heatbox.top = this->coord.y - (int)(SizeY * 0.5);
+
+    trig = 0;
+    for(auto& RoomPointer :  rooms) //когда узнаем в какой комнате айзек сразу будем проверять только обьекты из нее
+    {
+        if(trig == 1) break;
+
+        for( auto& ObjectPointer : RoomPointer->getObj() )
+        {
+            if( ObjectPointer->getName() == "solid" )
+            {
+                if( this->heatbox.intersects(ObjectPointer->getRect()) ) // 600х600 это пока что костыль
+                {
+                    this->coord.y = this->coord.y - this->velocity.y * time;
+                    this->velocity.y = 0;
+                    this->heatbox.top = this->coord.y - (int)(SizeY * 0.5);
+                    trig = 1;
+                    break;
+                }
+            }
+        }
+    }
+
+
+    this->HeadSprite.setPosition({this->coord.x - (int)(SizeX * 0.7), this->coord.y - int(SizeY * 1)} );
+    if(BodyDirection != "Left") this->BodySprite.setPosition({this->coord.x - (int)(SizeX * 0.7), this->coord.y - int(SizeY * 0.5)} ); 
+    if(BodyDirection == "Left") this->BodySprite.setPosition({this->coord.x + (int)(SizeX * 1), this->coord.y - int(SizeY * 0.5)} ); 
+    
 }
 
 
-int Zombie::turn(Player& pl, list<Zombie>& Zombies)
+int Zombie::turn(Player& pl, list<Zombie>& Zombies, vector<Room*>& rooms)
 {
     if(this->getHealth() <= 0)
     {
@@ -126,7 +183,7 @@ int Zombie::turn(Player& pl, list<Zombie>& Zombies)
     }
     else
     {
-        MoveInertion(pl);
+        MoveInertion(pl, rooms);
         for(auto it = Zombies.begin(); it != Zombies.end(); it++)
         {
             if ( (this->coord - it->coord).ModuleQuadr() < 1000)

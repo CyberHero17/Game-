@@ -7,7 +7,7 @@
 #include "Entity.hpp"
 #include <vector>
 #include <list>
-
+#include "map.hpp"
 
 using std::cin;
 using std::cout;
@@ -19,6 +19,8 @@ class Tear;
 class Zombie: public Entity
 {
 public:
+
+    float SizeX, SizeY;
     Vector2D dV;
     string BodyDirection;
     sf::Sprite BodySprite;
@@ -29,8 +31,8 @@ public:
     Zombie(int hp, float speed, Vector2D coord);
 
 
-    void MoveInertion(Player& pl);
-    int turn(Player& pl, list<Zombie>& Zombies);
+    void MoveInertion(Player& pl, vector<Room*>& rooms);
+    int turn(Player& pl, list<Zombie>& Zombies, vector<Room*>& rooms);
     void getDamage(Tear& t);
     void death();
 

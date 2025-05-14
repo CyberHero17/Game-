@@ -3,12 +3,21 @@
 #include <math.h>
 #include "GlobalVariables.hpp"
 
+
 Player::Player(int hp, float max_speed, float Damage, float TearsFreq, float Range, float ShotSpeed, float Luck, float TearMass)
 {
+    SizeX = 32;
+    SizeY = 32;
+    this->heatbox.width = SizeX * 1.1;
+    this->heatbox.height = SizeY * 1.4;
     
+
     GettingItemTexture.loadFromFile("Textures/IsaacTexture3.png");
-    this->GettingItemSprite.setTexture(GettingItemTexture);
+    this->GettingItemSprite.setTexture(GettingItemTexture); 
+    GettingItemSprite.scale(SizeX/40, SizeY/40);
+
     this->GettingDamageSprite.setTexture(GettingItemTexture); //не опечатка ибо в GettingItemTexture лежит целиком текстура со всеми "эмоциями Айзека"
+    GettingDamageSprite.scale(SizeX/40, SizeY/40);
     GettingItem = 0;
 
     this->health = hp;
@@ -41,6 +50,8 @@ Player::Player(int hp, float max_speed, float Damage, float TearsFreq, float Ran
         HealthHearts.push_back(HPSprite);
     }
 
+    this->coord = {350,300};
+
     /*font.loadFromFile("Fonts/TimesNewRoman.ttf");
     this->max_speed_Text.setFont(font);
     this->DamageText.setFont(font);
@@ -61,25 +72,23 @@ Player::Player(int hp, float max_speed, float Damage, float TearsFreq, float Ran
     HeadDirection = "Down";
     this->time_invicibility = 1;
     this->name = "Isaac";
-    this->acceleration = max_speed/10;
+    this->acceleration = max_speed/5;
 
     this->texture.loadFromFile("Textures/Isaac_textures.png");
     this->HeadSprite.setTexture(this->texture);
     this->HeadSprite.setTextureRect(sf::IntRect(0,0,32,32));
-    this->HeadSprite.setScale(2,2);
+    this->HeadSprite.setScale(SizeX/20,SizeY/20);
     
     this->BodySprite.setTexture(this->texture);
     this->BodySprite.setTextureRect(sf::IntRect(0,32,32,32));
-    this->BodySprite.setScale(2,2);
-
-    heatbox = sf::FloatRect(0, 0, 32, 64);
+    //this->BodySprite.setScale(2,2);
 
     sf::Sprite temp; 
     temp.setTexture(this->texture);
     this->coord.x += 3600; 
     this->coord.y += 3600; 
     temp.setPosition(this->coord.x, this->coord.y);
-    temp.scale(2,2); 
+    temp.scale(SizeX/20,SizeY/20); 
 
     temp.setTextureRect(sf::IntRect(192,0,32,32));   BodyAnimationSprites.push_back(temp);
     temp.setTextureRect(sf::IntRect(224,0,32,32));   BodyAnimationSprites.push_back(temp);
@@ -106,7 +115,7 @@ Player::Player(int hp, float max_speed, float Damage, float TearsFreq, float Ran
     
 }
 
-void Player::MoveInertion(sf::Event event) // что просходит с игроком в каждом кадре
+void Player::MoveInertion(sf::Event event, vector<Room*>& rooms) // что просходит с игроком в каждом кадре
 {
     for(auto spr : this->BodyAnimationSprites) spr.setPosition(this->coord.x + 3600, this->coord.y + 3600); // спрайты анимации "ходят за Айзеком"
 
@@ -153,7 +162,7 @@ void Player::MoveInertion(sf::Event event) // что просходит с иг�
             HeadDirection = "Down";
         }
     }
-    if (sf::Keyboard::isKeyPressed(sf::Keyboard::W)) 
+    if (sf::Keyboard::isKeyPressed(sf::Keyboard::W))
     {
         dV.y -= acceleration * time;
         BodyDirection = "Up";
@@ -171,11 +180,10 @@ void Player::MoveInertion(sf::Event event) // что просходит с иг�
     }
 
 
-    if (dV == null_vect) // т.е. в случае если мы ничего не нажимаем (персонаж должен сам затормозить)
-    {
-        this->body_time.restart(); // пока Айзек не ходит - таймер анимации на нуле
-        velocity = velocity * 0.94; // коэфициент подобран опытным путем
-    }
+    if (dV.x == 0) velocity.x = velocity.x * 0.9; // т.е. в случае если мы ничего не нажимаем (персонаж должен сам затормозить)
+    if (dV.y == 0) velocity.y = velocity.y * 0.9; // коэфициент подобран опытным путем
+    
+    if(dV == null_vect) this->body_time.restart(); // пока Айзек не ходит - таймер анимации на нуле
 
     this->velocity = this->velocity + dV;
     if (velocity.ModuleQuadr() > max_speed * max_speed) // если скорость стала больше максимальной, ее надо уменьшить
@@ -184,13 +192,64 @@ void Player::MoveInertion(sf::Event event) // что просходит с иг�
         velocity = velocity * k_decr;
     }
     
-    this->coord = this->coord + this->velocity * time;
 
 
-    this->HeadSprite.setPosition({this->coord.x - 16, this->coord.y - 32} );
-    if(BodyDirection != "Left") this->BodySprite.setPosition({this->coord.x - 16, this->coord.y + 20 - 32} ); // -16 и -32 чтобы спрайт рисовался не в угле а в центре
-    if(BodyDirection == "Left") this->BodySprite.setPosition({this->coord.x - 16 + 64, this->coord.y + 20 - 32} ); // +64 и +20 - чтобы тело и голова были связаны
+    this->coord.x = this->coord.x + this->velocity.x * time;
+    this->heatbox.left = this->coord.x - (int)(SizeX * 0.5);
     
+    int trig = 0;
+    for(auto& RoomPointer :  rooms)
+    {
+        if(trig == 1) break;
+
+        for( auto& ObjectPointer : RoomPointer->getObj() )
+        {
+            if( ObjectPointer->getName() == "solid" )
+            {
+                if( this->heatbox.intersects(ObjectPointer->getRect()))
+                {
+                    this->coord.x = this->coord.x - this->velocity.x * time;
+                    this->velocity.x = 0;
+                    this->heatbox.left = this->coord.x - (int)(SizeX * 0.5);
+                    cout << "Wall X\n";
+                    trig = 1;
+                    break;
+                }
+            }
+        }
+    }
+
+
+    this->coord.y = this->coord.y + this->velocity.y * time;
+    this->heatbox.top = this->coord.y - (int)(SizeY * 0.5);
+
+    trig = 0;
+    for(auto& RoomPointer :  rooms) //когда узнаем в какой комнате айзек сразу будем проверять только обьекты из нее
+    {
+        if(trig == 1) break;
+
+        for( auto& ObjectPointer : RoomPointer->getObj() )
+        {
+            if( ObjectPointer->getName() == "solid" )
+            {
+                if( this->heatbox.intersects(ObjectPointer->getRect()) ) // 600х600 это пока что костыль
+                {
+                    this->coord.y = this->coord.y - this->velocity.y * time;
+                    this->velocity.y = 0;
+                    this->heatbox.top = this->coord.y - (int)(SizeY * 0.5);
+                    trig = 1;
+                    break;
+                }
+            }
+        }
+    }
+
+
+    this->HeadSprite.setPosition({this->coord.x - (int)(SizeX * 0.7), this->coord.y - int(SizeY * 1)} );
+    if(BodyDirection != "Left") this->BodySprite.setPosition({this->coord.x - (int)(SizeX * 0.7), this->coord.y - int(SizeY * 0.5)} ); 
+    if(BodyDirection == "Left") this->BodySprite.setPosition({this->coord.x + (int)(SizeX * 1), this->coord.y - int(SizeY * 0.5)} ); 
+    
+    // cout << "heatbox : " << heatbox.getPosition().x << " " << heatbox.getPosition().y << endl; // отладочный вывод хитбокса
     return;
 
 }
@@ -220,19 +279,20 @@ void Player::shoot(sf::Event event, list<Tear>& Tears)
         if( sf::Keyboard::isKeyPressed(sf::Keyboard::Up)) {HeadSprite.setTextureRect(sf::IntRect(160,0,32,32)); HeadDirection = "Up";}
 
         this->tears_time.restart();
-        Tear T(this->coord, event, this->HeadDirection, this->Damage, this->Range, this->ShotSpeed, this->TearMass); // тут у слезы есть спрайт, но при переносе в Tears он пропадает
+        Tear T(*this, event); // тут у слезы есть спрайт, но при переносе в Tears он пропадает
         Tears.push_back(T); // пока что в main.cpp стоит костыль 
     }
 
 } 
 
-void Player::turn(sf::Event event, bool EnableInertion, list<Tear>& Tears)
+void Player::turn(sf::Event event, bool EnableInertion, list<Tear>& Tears, vector<Room*>& rooms)
 {   
     float time_from_shooting = this->tears_time.getElapsedTime().asSeconds();
     float time_from_damage = this->damage_time.getElapsedTime().asSeconds();
 
     this->BodySprite = this->BodyAnimationSprites[2];
     this->BodySprite.setPosition({this->coord.x - 16, this->coord.y + 20 - 32} ); 
+    
 
     if(time_from_shooting > 1/(3*this->TearsFreq) )
     {
@@ -248,7 +308,7 @@ void Player::turn(sf::Event event, bool EnableInertion, list<Tear>& Tears)
     //HeadDirection = "Down";
     BodyDirection = "Down";
 
-    MoveInertion(event);
+    MoveInertion(event, rooms);
 
     if (event.type == sf::Event::KeyPressed)
     {
@@ -270,12 +330,14 @@ void Player::turn(sf::Event event, bool EnableInertion, list<Tear>& Tears)
         }
         
         this->GettingItemSprite.setTextureRect(sf::IntRect(160, 432, 64, 64) ); // подбор предмета
-        this->GettingItemSprite.setPosition(this->coord.x - 16, this->coord.y - 32);
+        this->GettingItemSprite.setPosition(this->coord.x - (int)(SizeX * 0.6), this->coord.y - (int)(SizeY * 1));
     }
+
+
     if( time_from_damage < this->time_invicibility)
     {
         this->GettingDamageSprite.setTextureRect(sf::IntRect(288, 430, 64, 64) ); // получение урона
-        this->GettingDamageSprite.setPosition(this->coord.x - 16, this->coord.y - 32);
+        this->GettingDamageSprite.setPosition(this->coord.x - (int)(SizeX * 0.6), this->coord.y - (int)(SizeY * 1));
     }
 }
 
@@ -335,4 +397,13 @@ void Player::draw(sf::RenderWindow &window)
 
     window.draw(this->CharacteristicsSprite);
 
+    /*   // отладочное отображение центра персонажа
+    sf::Texture CenterTexture;
+    CenterTexture.loadFromFile("Textures/Bomb.png");
+    sf::Sprite CenterSprite;
+    CenterSprite.setTexture(CenterTexture);
+    CenterSprite.setPosition(coord.x, coord.y);
+    CenterSprite.scale(0.1, 0.1);
+    window.draw(CenterSprite);
+    */
 }

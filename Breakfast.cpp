@@ -9,6 +9,7 @@ Breakfast::Breakfast(Vector2D coord)
 
     PedestalSprite.setTexture(PedestalTexture); PedestalSprite.setPosition(coord.x - 24 + 16, coord.y - 16 + 16);
     ItemSprite.setTexture(BreakfastTexture); ItemSprite.setPosition(coord.x - 14,coord.y - 48);
+    
     id = 1;
     name = "Breakfast";
     collider_size = 20;
@@ -45,7 +46,7 @@ void Breakfast::draw(sf::RenderWindow &window)
 void Breakfast::turn(Player &pl)
 {
     float time = this->AnimationTime.getElapsedTime().asMilliseconds() * 0.003;
-    ItemSprite.setPosition(coord.x - 14, coord.y - 48 + 10 * sin(time) );
+    ItemSprite.setPosition(coord.x - (int)(pl.SizeX * 0.5), coord.y - (int)(pl.SizeY * 1.5) + 10 * sin(time) );
     Vector2D vect_to_pl = pl.coord - this->coord;
     if(not ispicked)
     {

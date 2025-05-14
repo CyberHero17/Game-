@@ -18,6 +18,7 @@ using std::list;
 
 int main()
 {
+    
     HealthHeartsTexture.loadFromFile("Textures/Health.png");
     GettingItemTexture.loadFromFile("Textures/IsaacTexture3.png");
     
@@ -31,9 +32,9 @@ int main()
     Player Isaac(5, 0.8 * delta_time, 2, 3 , 5.0f, 5, 0, 2);
 
     Zombie Z1(6, 0.2 * delta_time, {3700,3800}); Zombies.push_back(Z1);
-    Zombie Z2(6, 0.2 * delta_time, {3750,3800}); Zombies.push_back(Z2);
-    Zombie Z3(6, 0.2 * delta_time, {3800,3800}); Zombies.push_back(Z3);
-    Zombie Z4(6, 0.2 * delta_time, {3700,3800}); Zombies.push_back(Z4);
+    //Zombie Z2(6, 0.2 * delta_time, {3750,3800}); Zombies.push_back(Z2);
+    //Zombie Z3(6, 0.2 * delta_time, {3800,3800}); Zombies.push_back(Z3);
+    //Zombie Z4(6, 0.2 * delta_time, {3700,3800}); Zombies.push_back(Z4);
     
     Breakfast Br ({4000,3900});
     // r1.CreateObjects();
@@ -67,7 +68,7 @@ int main()
         auto it_Monst = Zombies.begin();
         while(it_Monst != Zombies.end())
         {
-            int WhatHappened = it_Monst->turn(Isaac, Zombies);
+            int WhatHappened = it_Monst->turn(Isaac, Zombies, rooms);
             if (WhatHappened == 1) // т.е. если с монстром ничего не произошло
             {    
                 it_Monst++;
@@ -83,8 +84,9 @@ int main()
         }
 
         Br.turn(Isaac);
-        Isaac.turn(event, EnableInertion, Tears);
+        Isaac.turn(event, EnableInertion, Tears, rooms);
         
+        //cout << Isaac.heatbox.getPosition().x << " " << Isaac.heatbox.getPosition().y << endl;
 
         auto it_Tear = Tears.begin();
         while(it_Tear != Tears.end()) // ход слез

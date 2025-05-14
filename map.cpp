@@ -1,6 +1,5 @@
 #pragma once 
 #include "map.hpp"
-#include <iostream>
 Object::Object(){
     x = 0;
     y = 0;
@@ -63,9 +62,9 @@ Door::Door(std::string filename){
     sprite.setTexture(texture);
 };
 
-bool Object::CheckCollision(sf::FloatRect& slave){
-    // std::cout << "I'm object";
-    return false;
+bool Object::CheckCollision(sf::FloatRect& heatbox){
+    std::cout << "I'm object";
+    return this->getRect().intersects(heatbox);
 };
 
 bool Door::CheckCollision(sf::FloatRect& d){
@@ -136,12 +135,13 @@ bool Room::CreateObjects(){
         float Xo = strtof(o->Attribute("x"), NULL) + this->X;
         float Yo = strtof(o->Attribute("y"), NULL) + this->Y;
         float WIDTH = strtof(o->Attribute("width"), NULL);
-        float HEIGHT = strtof(o->Attribute("width"), NULL);
+        float HEIGHT = strtof(o->Attribute("height"), NULL);
         
         std::string Name = "none";
         if(o->Attribute("name") != nullptr){
             Name = (std::string)(o->Attribute("name"));
         } 
+        std::cout << Name << " " << WIDTH << " " << HEIGHT << '\n';
         if(Name[0] != 's'){
             Object* item = new Door(std::move("Textures/Door.png"));
             item->setX(Xo);

@@ -14,7 +14,7 @@ Tear::Tear()
     this->ShotSpeed = 5;
     this->texture.loadFromFile("Textures/Tear.png");
     this->sprite.setTexture(this->texture);
-    this->coord = coord;
+    //this->coord = coord;
     
 
     cout << "Default tear constructor\n";
@@ -22,13 +22,13 @@ Tear::Tear()
 
 }
 
-Tear::Tear(Vector2D coord, sf::Event event, string HeadDirection, float Damage, float Range, float ShotSpeed, float mass)
+Tear::Tear(Player pl, sf::Event event)
 {
-    this->Damage = Damage;
-    this->Range = Range;
-    this->ShotSpeed = ShotSpeed;
+    this->Damage = pl.Damage;
+    this->Range = pl.Range;
+    this->ShotSpeed = pl.ShotSpeed;
     
-    this->mass = mass;
+    this->mass = pl.TearMass;
     Animation = 0;
     this->time.restart();
     
@@ -44,22 +44,22 @@ Tear::Tear(Vector2D coord, sf::Event event, string HeadDirection, float Damage, 
         if (     sf::Keyboard::isKeyPressed(sf::Keyboard::Left)) 
         {
             velocity = {-ShotSpeed, 0};
-            this->coord = {coord.x-16, coord.y - 12};
+            this->coord = {pl.coord.x - (int)(pl.SizeX * 0.4), pl.coord.y - (int)(pl.SizeY * 0.6)};
         }
         else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right)) 
         {
             velocity = {ShotSpeed, 0};
-            this->coord = {coord.x + 32 - 8, coord.y - 12};
+            this->coord = {pl.coord.x + (int)(pl.SizeX * 0.4), pl.coord.y - (int)(pl.SizeY * 0.6)};
         }
         else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Down)) 
         {
             velocity = {0, ShotSpeed};
-            this->coord = {coord.x , coord.y + 16 - 4};
+            this->coord = {pl.coord.x - (int)(pl.SizeX * 0.35), pl.coord.y - (int)(pl.SizeY * 0.6)};
         }
         else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up)) 
         {
             velocity = {0, -ShotSpeed};
-            this->coord = {coord.x , coord.y + 4};
+            this->coord = {pl.coord.x - (int)(pl.SizeX * 0.35), pl.coord.y - (int)(pl.SizeY * 0.6)};
         }
 
         else
