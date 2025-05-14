@@ -3,6 +3,16 @@
 #include <math.h>
 #include "GlobalVariables.hpp"
 
+Room* FindRmMaxim(int id, std::vector<Room*> rooms){
+    Room* pr;
+    for(auto& x : rooms){
+        int s = x->getRoomId();
+        if(s == id){
+            pr = x;
+        }
+    }
+    return pr;
+};
 
 Player::Player(int hp, float max_speed, float Damage, float TearsFreq, float Range, float ShotSpeed, float Luck, float TearMass)
 {
@@ -192,29 +202,24 @@ void Player::MoveInertion(sf::Event event, vector<Room*>& rooms) // что пр�
         velocity = velocity * k_decr;
     }
     
-
+    Room* RoomPointer = FindRmMaxim(this->roomId, rooms);
 
     this->coord.x = this->coord.x + this->velocity.x * time;
     this->heatbox.left = this->coord.x - (int)(SizeX * 0.5);
     
     int trig = 0;
-    for(auto& RoomPointer :  rooms)
-    {
-        if(trig == 1) break;
 
-        for( auto& ObjectPointer : RoomPointer->getObj() )
+    for( auto& ObjectPointer : RoomPointer->getObj() )
+    {
+        if( ObjectPointer->getName() == "solid" )
         {
-            if( ObjectPointer->getName() == "solid" )
+            if( this->heatbox.intersects(ObjectPointer->getRect()))
             {
-                if( this->heatbox.intersects(ObjectPointer->getRect()))
-                {
-                    this->coord.x = this->coord.x - this->velocity.x * time;
-                    this->velocity.x = 0;
-                    this->heatbox.left = this->coord.x - (int)(SizeX * 0.5);
-                    cout << "Wall X\n";
-                    trig = 1;
-                    break;
-                }
+                this->coord.x = this->coord.x - this->velocity.x * time;
+                this->velocity.x = 0;
+                this->heatbox.left = this->coord.x - (int)(SizeX * 0.5);
+                trig = 1;
+                break;
             }
         }
     }
@@ -224,25 +229,21 @@ void Player::MoveInertion(sf::Event event, vector<Room*>& rooms) // что пр�
     this->heatbox.top = this->coord.y - (int)(SizeY * 0.5);
 
     trig = 0;
-    for(auto& RoomPointer :  rooms) //когда узнаем в какой комнате айзек сразу будем проверять только обьекты из нее
-    {
-        if(trig == 1) break;
 
-        for( auto& ObjectPointer : RoomPointer->getObj() )
+    for( auto& ObjectPointer : RoomPointer->getObj() )
+    {
+        if( ObjectPointer->getName() == "solid" )
         {
-            if( ObjectPointer->getName() == "solid" )
+            if( this->heatbox.intersects(ObjectPointer->getRect()) ) // 600х600 это пока что костыль
             {
-                if( this->heatbox.intersects(ObjectPointer->getRect()) ) // 600х600 это пока что костыль
-                {
-                    this->coord.y = this->coord.y - this->velocity.y * time;
-                    this->velocity.y = 0;
-                    this->heatbox.top = this->coord.y - (int)(SizeY * 0.5);
-                    trig = 1;
-                    break;
-                }
+                this->coord.y = this->coord.y - this->velocity.y * time;
+                this->velocity.y = 0;
+                this->heatbox.top = this->coord.y - (int)(SizeY * 0.5);
+                trig = 1;
+                break;
             }
         }
-    }
+    } 
 
 
     this->HeadSprite.setPosition({this->coord.x - (int)(SizeX * 0.7), this->coord.y - int(SizeY * 1)} );

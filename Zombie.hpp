@@ -8,6 +8,7 @@
 #include <vector>
 #include <list>
 #include "map.hpp"
+#include "GlobalVariables.hpp"
 
 using std::cin;
 using std::cout;
@@ -20,6 +21,7 @@ class Zombie: public Entity
 {
 public:
 
+    int roomId;
     float SizeX, SizeY;
     Vector2D dV;
     string BodyDirection;
@@ -28,7 +30,7 @@ public:
     sf::Clock body_time;
     vector<sf::Sprite> BodyAnimationSprites;
 
-    Zombie(int hp, float speed, Vector2D coord);
+    Zombie(int hp, float speed, Vector2D coord, int roomId);
 
 
     void MoveInertion(Player& pl, vector<Room*>& rooms);

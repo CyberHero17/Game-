@@ -3,8 +3,9 @@
 #include <math.h>
 #include "Structures.hpp"
 
-Zombie::Zombie(int hp, float max_speed, Vector2D coord)
+Zombie::Zombie(int hp, float max_speed, Vector2D coord, int rmId)
 {
+    this->roomId = rmId;
     SizeX = 32;
     SizeY = 32;
     this->heatbox.width = SizeX * 1.1;
@@ -20,19 +21,18 @@ Zombie::Zombie(int hp, float max_speed, Vector2D coord)
     this->texture = texture;
 
     this->coord = coord;
-
-    this->texture.loadFromFile("Textures/Zombie_textures.png");
-    this->HeadSprite.setTexture(this->texture);
+    this->texture = ZombieTexture;
+    this->HeadSprite.setTexture(ZombieTexture);
     this->HeadSprite.setTextureRect(sf::IntRect(0,0,32,32));
     this->HeadSprite.setScale(SizeX/20,SizeY/20);
     
     
-    this->BodySprite.setTexture(this->texture);
+    this->BodySprite.setTexture(ZombieTexture);
     this->BodySprite.setTextureRect(sf::IntRect(0,32,32,32));
     this->HeadSprite.setScale(SizeX/20,SizeY/20);
 
     sf::Sprite temp; 
-    temp.setTexture(this->texture);
+    temp.setTexture(ZombieTexture);
     temp.setPosition(this->coord.x, this->coord.y);
     temp.scale(SizeX/20,SizeY/20); 
 
@@ -125,18 +125,20 @@ void Zombie::MoveInertion(Player &pl, vector<Room*>& rooms)
     {
         if(trig == 1) break;
 
-        for( auto& ObjectPointer : RoomPointer->getObj() )
+        if(RoomPointer->getRoomId() == this->roomId)
         {
-            if( ObjectPointer->getName() == "solid" )
+            for( auto& ObjectPointer : RoomPointer->getObj() )
             {
-                if( this->heatbox.intersects(ObjectPointer->getRect()))
+                if( ObjectPointer->getName() == "solid" )
                 {
-                    this->coord.x = this->coord.x - this->velocity.x * time;
-                    this->velocity.x = 0;
-                    this->heatbox.left = this->coord.x - (int)(SizeX * 0.5);
-                    cout << "Wall X\n";
-                    trig = 1;
-                    break;
+                    if( this->heatbox.intersects(ObjectPointer->getRect()))
+                    {
+                        this->coord.x = this->coord.x - this->velocity.x * time;
+                        this->velocity.x = 0;
+                        this->heatbox.left = this->coord.x - (int)(SizeX * 0.5);
+                        trig = 1;
+                        break;
+                    }
                 }
             }
         }
@@ -150,18 +152,20 @@ void Zombie::MoveInertion(Player &pl, vector<Room*>& rooms)
     for(auto& RoomPointer :  rooms) //когда узнаем в какой комнате айзек сразу будем проверять только обьекты из нее
     {
         if(trig == 1) break;
-
-        for( auto& ObjectPointer : RoomPointer->getObj() )
+        if(RoomPointer->getRoomId() == this->roomId)
         {
-            if( ObjectPointer->getName() == "solid" )
+            for( auto& ObjectPointer : RoomPointer->getObj() )
             {
-                if( this->heatbox.intersects(ObjectPointer->getRect()) ) // 600х600 это пока что костыль
+                if( ObjectPointer->getName() == "solid" )
                 {
-                    this->coord.y = this->coord.y - this->velocity.y * time;
-                    this->velocity.y = 0;
-                    this->heatbox.top = this->coord.y - (int)(SizeY * 0.5);
-                    trig = 1;
-                    break;
+                    if( this->heatbox.intersects(ObjectPointer->getRect()) ) // 600х600 это пока что костыль
+                    {
+                        this->coord.y = this->coord.y - this->velocity.y * time;
+                        this->velocity.y = 0;
+                        this->heatbox.top = this->coord.y - (int)(SizeY * 0.5);
+                        trig = 1;
+                        break;
+                    }
                 }
             }
         }

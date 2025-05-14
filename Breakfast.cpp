@@ -46,7 +46,7 @@ void Breakfast::draw(sf::RenderWindow &window)
 void Breakfast::turn(Player &pl)
 {
     float time = this->AnimationTime.getElapsedTime().asMilliseconds() * 0.003;
-    ItemSprite.setPosition(coord.x - (int)(pl.SizeX * 0.5), coord.y - (int)(pl.SizeY * 1.5) + 10 * sin(time) );
+    ItemSprite.setPosition(coord.x - (int)(pl.SizeX * 0.5), coord.y - (int)(pl.SizeY * 1.5) + 10 * sin(time) ); // движение вверх-вниз
     Vector2D vect_to_pl = pl.coord - this->coord;
     if(not ispicked)
     {
