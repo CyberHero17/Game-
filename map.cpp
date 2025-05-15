@@ -136,13 +136,13 @@ bool Room::CreateObjects(){
         float Xo = strtof(o->Attribute("x"), NULL) + this->X;
         float Yo = strtof(o->Attribute("y"), NULL) + this->Y;
         float WIDTH = strtof(o->Attribute("width"), NULL);
-        float HEIGHT = strtof(o->Attribute("width"), NULL);
+        float HEIGHT = strtof(o->Attribute("height"), NULL);
         
         std::string Name = "none";
         if(o->Attribute("name") != nullptr){
             Name = (std::string)(o->Attribute("name"));
         } 
-
+        std::cout << '{' << WIDTH << ' ' << HEIGHT << '}' << '\n';
         if(Name[0] != 's'){
             Object* item = new Door(std::move("Textures/Door.png"));
             item->setX(Xo);
