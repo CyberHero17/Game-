@@ -18,11 +18,12 @@ using std::list;
 
 int main()
 {
+    ZombieTexture.loadFromFile("Textures/Zombie_textures.png");
     HealthHeartsTexture.loadFromFile("Textures/Health.png");
     GettingItemTexture.loadFromFile("Textures/IsaacTexture3.png");
-    
+    BombTexture.loadFromFile("Textures/Bomb.png");
     list<Tear> Tears;
-    list<Zombie> Zombies;
+    //list<Zombie> Zombies;
 
     bool EnableInertion = 1;
     sf::RenderWindow window(sf::VideoMode(1000, 600), "The Pinging of the Isaac"); // с этой частью связана утечка приемрно в 259,467 байт
@@ -30,10 +31,10 @@ int main()
 
     Player Isaac(5, 0.8 * delta_time, 2, 3 , 5.0f, 5, 0, 2);
 
-    Zombie Z1(6, 0.2 * delta_time, {3700,3800}); Zombies.push_back(Z1);
-    Zombie Z2(6, 0.2 * delta_time, {3750,3800}); Zombies.push_back(Z2);
-    Zombie Z3(6, 0.2 * delta_time, {3800,3800}); Zombies.push_back(Z3);
-    Zombie Z4(6, 0.2 * delta_time, {3700,3800}); Zombies.push_back(Z4);
+    //Zombie Z1(6, 0.2 * delta_time, {3700,3800}, 0); Zombies.push_back(Z1);
+    //Zombie Z2(6, 0.2 * delta_time, {3750,3800}); Zombies.push_back(Z2);
+    //Zombie Z3(6, 0.2 * delta_time, {3800,3800}); Zombies.push_back(Z3);
+    //Zombie Z4(6, 0.2 * delta_time, {3700,3800}); Zombies.push_back(Z4);
     
     Breakfast Br ({4000,3900});
     // r1.CreateObjects();
@@ -50,9 +51,14 @@ int main()
     //     r->PlaceDoors();
     // }
 
+    //window.setFramerateLimit(60);
 
     while (window.isOpen())
     {
+        Room* RoomPointer = FindRm(Isaac.roomId);
+        RoomPointer->IWasHere = 1;
+
+
         //sf:Clock WorldClock;
         std::this_thread::sleep_for(std::chrono::milliseconds(delta_time));
         
@@ -64,10 +70,14 @@ int main()
             
             
         }
-        auto it_Monst = Zombies.begin();
-        while(it_Monst != Zombies.end())
+        auto it_Monst = RoomPointer->getZombies().begin();
+        //int count = 0;
+        while(it_Monst != RoomPointer->getZombies().end())
         {
-            int WhatHappened = it_Monst->turn(Isaac, Zombies);
+
+            int WhatHappened = it_Monst->turn(Isaac, RoomPointer->getZombies(), rooms);
+            //if(count%100 == 0) cout << "Moved " << RoomPointer->getRoomId() << " zombie\n";
+            //count++;
             if (WhatHappened == 1) // т.е. если с монстром ничего не произошло
             {    
                 it_Monst++;
@@ -76,21 +86,24 @@ int main()
 
             if (WhatHappened == 0) // т.е. зомби умер
             {
-                it_Monst = Zombies.erase(it_Monst);
+                it_Monst = RoomPointer->getZombies().erase(it_Monst);
                 continue;
             }
 
         }
-
+                                                                                            //cout << Isaac.roomId << endl;
         Br.turn(Isaac);
-        Isaac.turn(event, EnableInertion, Tears);
+        Isaac.turn(event, EnableInertion, Tears, rooms);
         
+
+        //cout << Br.PedestalSprite.getPosition().x << " " << Br.PedestalSprite.getPosition().y << endl;
+        //cout << Isaac.heatbox.getPosition().x << " " << Isaac.heatbox.getPosition().y << endl;
 
         auto it_Tear = Tears.begin();
         while(it_Tear != Tears.end()) // ход слез
         {
             it_Tear->sprite.setTexture(it_Tear->texture); // почему у слез не установлен спрайт по умолчанию?
-            int WhatHappened = it_Tear->turn(Zombies);
+            int WhatHappened = it_Tear->turn(RoomPointer->getZombies());
             if (WhatHappened == 1) // т.е. если слеза не врезаласась или уже уничтожена и просто проигрывает свою анимацию
             {
                 it_Tear++;
@@ -123,13 +136,21 @@ int main()
         } 
 
         window.setView(getCordsForView(Isaac.coord.x, Isaac.coord.y));
+        
 
 
-        for(auto it = Zombies.begin(); it != Zombies.end(); ++it)
+        for(auto& z : RoomPointer->getZombies())
         {
-            window.draw(it->BodySprite);
-            window.draw(it->HeadSprite);
+            z.HeadSprite.setTexture(ZombieTexture); // 
+            z.BodySprite.setTexture(ZombieTexture); // 
+            window.draw(z.BodySprite);
+            window.draw(z.HeadSprite);
         }
+
+        sf::Sprite testBombSprite;
+        testBombSprite.setTexture(BombTexture);
+        testBombSprite.setPosition({4000, 4000});
+        window.draw(testBombSprite);
 
         
         Br.draw(window);

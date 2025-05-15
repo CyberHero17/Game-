@@ -6,7 +6,11 @@
 #include "Player.hpp"
 #include <string>
 #include "tinyxml2.h"
-#include "tinyxml2.cpp"
+#include "Zombie.hpp"
+
+//#include "tinyxml2.cpp"
+class Zombie;
+class Player;
 
 class Object{
 friend class Room;
@@ -48,7 +52,10 @@ private:
     //std::vector<Door> doors;
     std::vector<Object*> obj;                                           // Все дополнительные элементы на карте
     std::vector<sf::Sprite> layers;                                     // Все дополнительные изображения
+    std::list<Zombie> Zombies;                                        // Зомби в комнате, которых потом нужно заспавнить
+    
 public:
+    bool IWasHere;
     Room(int ID);
     void Draw(sf::RenderWindow& window);
     void CreateRoom(Room* ptrr, float x, float y);                      // Создание комнаты с таким айдишником (Это основная функция)
@@ -68,6 +75,8 @@ public:
     sf::Sprite getMapSprite();
     sf::Texture getMapTexture();
     int getRoomId();
+    std::list<Zombie>& getZombies();
+    
 };
 
 

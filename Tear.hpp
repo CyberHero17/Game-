@@ -5,6 +5,7 @@
 #include "Entity.hpp"
 #include <list>
 #include "Zombie.hpp"
+#include "Player.hpp"
 
 using std::list;
 using std::cin;
@@ -13,7 +14,7 @@ using std::endl;
 
 
 class Zombie;
-
+class Player;
 class Tear
 {
 public:
@@ -30,7 +31,7 @@ public:
     sf::Clock time;
 public:
 
-    Tear(Vector2D coord, sf::Event event, string HeadDirection, float Damage, float Range, float ShotSpeed, float mass);
+    Tear(Player pl, sf::Event event);
     Tear();
     int turn(list<Zombie> &Zombies);
     Vector2D getCoord();

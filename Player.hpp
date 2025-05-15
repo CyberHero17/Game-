@@ -8,6 +8,7 @@
 #include <list>
 #include "Tear.hpp"
 #include <string>
+#include "map.hpp"
 
 using std::cin;
 using std::cout;
@@ -58,11 +59,13 @@ public:
     
     vector<sf::Sprite> BodyAnimationSprites;
 
+    float SizeX, SizeY;
+
     Player(int hp, float max_speed, float Damage, float TearsFreq, float Range, float ShotSpeed, float Luck, float TearMass);
-    void MoveInertion(sf::Event event);
+    void MoveInertion(sf::Event event, vector<Room*>& rooms);
 
     void shoot(sf::Event event, list<Tear>& Tears);
-    void turn(sf::Event event, bool EnableIntertion, list<Tear>& Tears);
+    void turn(sf::Event event, bool EnableIntertion, list<Tear>& Tears, vector<Room*>& rooms);
     void death();
     void getDamage(int D);
     void draw(sf::RenderWindow& window);
