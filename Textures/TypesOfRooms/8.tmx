@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.10" tiledversion="1.11.1-99-gec89c545" orientation="orthogonal" renderorder="right-down" width="45" height="45" tilewidth="16" tileheight="16" infinite="0" nextlayerid="4" nextobjectid="46">
+<map version="1.10" tiledversion="1.11.1-99-gec89c545" orientation="orthogonal" renderorder="right-down" width="45" height="45" tilewidth="16" tileheight="16" infinite="0" nextlayerid="4" nextobjectid="58">
  <tileset firstgid="1" source="ashpit.tsx"/>
  <tileset firstgid="2" source="rocks_ashpit.tsx"/>
  <layer id="1" name="Picture" width="45" height="45">
@@ -2032,18 +2032,10 @@
   </data>
  </layer>
  <objectgroup id="2" name="solid">
-  <object id="1" name="solid" x="1.68421" y="-0.842105" width="48" height="720"/>
-  <object id="2" name="solid" x="-9.26316" y="668.632" width="727.579" height="50.5263"/>
-  <object id="3" name="solid" x="-2.52633" y="-1.68421" width="722.527" height="53.8947"/>
-  <object id="4" name="solid" x="665.263" y="-0.842107" width="53.8947" height="720.842"/>
   <object id="5" name="solid" x="64.8421" y="593.684" width="31.1579" height="73.2632"/>
   <object id="6" name="solid" x="91.7895" y="627.368" width="33.6842" height="33.6842"/>
   <object id="7" name="solid" x="143.158" y="368" width="32.8421" height="48"/>
-  <object id="8" name="solid" x="162.526" y="192.842" width="26.1053" height="42.1053"/>
-  <object id="9" name="solid" x="195.368" y="192.842" width="26.9474" height="44.6316"/>
   <object id="10" name="solid" x="167.579" y="130.526" width="20.2105" height="24.4211"/>
-  <object id="11" name="solid" x="180.211" y="146.526" width="20.2105" height="25.2632"/>
-  <object id="12" name="solid" x="192.842" y="159.158" width="21.8947" height="25.2632"/>
   <object id="13" name="solid" x="226.526" y="126.316" width="21.0526" height="24.4211"/>
   <object id="14" name="solid" x="563.368" y="128.842" width="33.6842" height="37.0526"/>
   <object id="15" name="solid" x="632.421" y="53.0526" width="36.2105" height="35.3685"/>
@@ -2057,22 +2049,29 @@
   <object id="23" name="solid" x="402.526" y="331.789" width="30.3158" height="30.3158"/>
   <object id="24" name="solid" x="340.211" y="339.368" width="58.1053" height="55.5789"/>
   <object id="25" name="solid" x="260.211" y="280.421" width="25.2632" height="46.3158"/>
-  <object id="26" name="solid" x="432" y="496" width="21.8947" height="23.5789"/>
   <object id="27" name="solid" x="242.526" y="450.526" width="26.9474" height="31.1579"/>
   <object id="28" name="solid" x="517.895" y="322.526" width="22.7368" height="54.7368"/>
   <object id="29" name="solid" x="502.737" y="374.737" width="18.5263" height="22.7368"/>
-  <object id="30" name="solid" x="517.053" y="389.895" width="24.4211" height="21.8947"/>
-  <object id="31" name="solid" x="420.211" y="407.579" width="23.5789" height="21.0526"/>
-  <object id="32" name="solid" x="465.684" y="471.579" width="26.1053" height="24.4211"/>
   <object id="33" name="solid" x="533.053" y="543.158" width="52.2105" height="27.7895"/>
   <object id="34" name="solid" x="408.421" y="583.579" width="46.3158" height="21.8947"/>
-  <object id="35" name="solid" x="352" y="416" width="24.4211" height="25.2632"/>
   <object id="36" name="solid" x="272.842" y="495.158" width="21.8947" height="24.4211"/>
   <object id="37" name="solid" x="542.316" y="192.842" width="29.4737" height="30.3158"/>
-  <object id="42" name="udoor" x="353.053" y="4.7273" width="31.5789" height="54.5454"/>
-  <object id="43" name="ldoor" x="2.20093" y="327.215" width="54.5455" height="32.7273"/>
-  <object id="44" name="rdoor" x="660.689" y="332.555" width="57.9904" height="32.1531"/>
-  <object id="45" name="ddoor" x="334.737" y="661.435" width="37.8947" height="66.6029"/>
+  <object id="42" name="udoor" x="352.211" y="13.9905" width="31.5789" height="34.3349"/>
+  <object id="43" name="ldoor" x="17.3588" y="330.583" width="33.4929" height="32.7273"/>
+  <object id="44" name="rdoor" x="669.952" y="335.081" width="33.5693" height="32.1531"/>
+  <object id="45" name="ddoor" x="328" y="672.382" width="37.8947" height="21.9713"/>
+  <object id="46" name="solid" x="-3.36842" y="0" width="323.368" height="53.0526"/>
+  <object id="47" name="solid" x="416" y="-4.21053" width="304.842" height="61.4737"/>
+  <object id="48" name="solid" x="666.947" y="53.8947" width="53.8947" height="248.421"/>
+  <object id="49" name="solid" x="666.105" y="397.474" width="54.7368" height="321.684"/>
+  <object id="50" name="solid" x="405.053" y="664.421" width="261.053" height="50.5263"/>
+  <object id="51" name="solid" x="0.842105" y="663.579" width="291.368" height="52.2105"/>
+  <object id="52" name="solid" x="0" y="45.4737" width="55.5789" height="244.211"/>
+  <object id="53" name="solid" x="3.36842" y="401.684" width="48.8421" height="266.947"/>
+  <object id="54" name="solid" x="320" y="-1.68421" width="96.8421" height="1.68421"/>
+  <object id="55" name="solid" x="714.947" y="298.105" width="6.73684" height="121.263"/>
+  <object id="56" name="solid" x="-4.21053" y="288.842" width="11.7895" height="106.947"/>
+  <object id="57" name="solid" x="293.895" y="717.474" width="115.368" height="1.68421"/>
  </objectgroup>
  <layer id="3" name="Tile Layer 2" width="45" height="45">
   <data>
@@ -2537,7 +2536,7 @@
    <tile/>
    <tile/>
    <tile/>
-   <tile gid="37"/>
+   <tile/>
    <tile/>
    <tile/>
    <tile/>
@@ -2583,7 +2582,6 @@
    <tile/>
    <tile/>
    <tile/>
-   <tile gid="44"/>
    <tile/>
    <tile/>
    <tile/>
@@ -2626,9 +2624,10 @@
    <tile/>
    <tile/>
    <tile/>
-   <tile gid="7"/>
    <tile/>
-   <tile gid="6"/>
+   <tile/>
+   <tile/>
+   <tile/>
    <tile/>
    <tile/>
    <tile/>
@@ -2716,9 +2715,9 @@
    <tile/>
    <tile/>
    <tile/>
-   <tile gid="15"/>
    <tile/>
-   <tile gid="14"/>
+   <tile/>
+   <tile/>
    <tile/>
    <tile/>
    <tile/>
@@ -3233,7 +3232,6 @@
    <tile/>
    <tile/>
    <tile/>
-   <tile gid="45"/>
    <tile/>
    <tile/>
    <tile/>
@@ -3272,7 +3270,8 @@
    <tile/>
    <tile/>
    <tile/>
-   <tile gid="4"/>
+   <tile/>
+   <tile/>
    <tile/>
    <tile/>
    <tile/>
@@ -3313,7 +3312,7 @@
    <tile/>
    <tile/>
    <tile/>
-   <tile gid="43"/>
+   <tile/>
    <tile/>
    <tile/>
    <tile/>
@@ -3455,7 +3454,7 @@
    <tile/>
    <tile/>
    <tile/>
-   <tile gid="4"/>
+   <tile/>
    <tile/>
    <tile/>
    <tile/>
@@ -3543,7 +3542,7 @@
    <tile/>
    <tile/>
    <tile/>
-   <tile gid="44"/>
+   <tile/>
    <tile/>
    <tile/>
    <tile/>

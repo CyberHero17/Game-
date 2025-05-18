@@ -147,7 +147,7 @@ bool Room::CreateObjects(){
         if(o->Attribute("name") != nullptr){
             Name = (std::string)(o->Attribute("name"));
         } 
-        std::cout << '{' << WIDTH << ' ' << HEIGHT << '}' << '\n';
+        //std::cout << '{' << WIDTH << ' ' << HEIGHT << '}' << '\n';
         if(Name[0] != 's'){
             Object* item = new Door(std::move("Textures/Door.png"));
             item->setX(Xo);
@@ -173,8 +173,9 @@ bool Room::CreateObjects(){
 };
 
 
-bool Room::PlaceDoors(){
+bool Room::PlaceDoors(std::string ls){
     //std::cout << this->getLayers().size();
+    //std::cout << ls<< '}' << '\n';
     for(auto& x : this->getObj()){
         if(x->getName()[0] == 's') continue;
         sf::Sprite scopy = x->getSprite();
@@ -184,23 +185,39 @@ bool Room::PlaceDoors(){
         float Yr = x->getY();
         //std::cout << Xr << ' ' << Yr;
         if(x->getName() == "ldoor"){
-            scopy.setPosition(Xr, Yr + Hei);
+            if(ls[0] == '#'){ 
+                x->setName("solid");
+                continue;
+            }
             scopy.rotate(-90);
-            std::cout << Xr << "," << Yr;
+            scopy.setPosition(Xr, Yr + 52);
             this->layers.push_back(scopy);
         }
         if(x->getName() == "rdoor"){
-            scopy.setPosition(Xr+Wid, Yr);
+            if(ls[2] == '#'){ 
+                x->setName("solid");
+                continue;
+            }
+            //std::cout << "here";
             scopy.rotate(90);
+            scopy.setPosition(Xr + 36, Yr);
             this->layers.push_back(scopy);
         }
         if(x->getName() == "udoor"){
-            scopy.setPosition(Xr+Wid, Yr);
+            if(ls[1] == '#'){ 
+                x->setName("solid");
+                continue;
+            }
+            scopy.setPosition(Xr, Yr);
             this->layers.push_back(scopy);
         }
         if(x->getName() == "ddoor"){
-            scopy.setPosition(Xr + Wid, Yr + 1.38f*Hei);
+            if(ls[3] == '#'){ 
+                x->setName("solid");
+                continue;
+            }
             scopy.rotate(180);
+            scopy.setPosition(Xr + 52, Yr  + 36);
             this->layers.push_back(scopy);
         }
     }
@@ -304,7 +321,7 @@ void Room::CreateRoom(Room* ptrr, float x, float y){
         }   
     // Всё, есть спрайты всех объектов на карте
     CreateObjects();
-    PlaceDoors();
+    //PlaceDoors();
     std::cout << "Success ---->"<< id << '\n';
 };
 

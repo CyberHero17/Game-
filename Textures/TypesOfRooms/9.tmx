@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.10" tiledversion="1.11.1-99-gec89c545" orientation="orthogonal" renderorder="right-down" width="45" height="45" tilewidth="16" tileheight="16" infinite="0" nextlayerid="4" nextobjectid="66">
+<map version="1.10" tiledversion="1.11.1-99-gec89c545" orientation="orthogonal" renderorder="right-down" width="45" height="45" tilewidth="16" tileheight="16" infinite="0" nextlayerid="4" nextobjectid="80">
  <tileset firstgid="1" source="ashpit.tsx"/>
  <tileset firstgid="2" source="rocks_ashpit.tsx"/>
  <layer id="1" name="Picture" width="45" height="45">
@@ -2032,10 +2032,6 @@
   </data>
  </layer>
  <objectgroup id="2" name="solid">
-  <object id="1" name="solid" x="-6.73684" y="-0.842105" width="56.4211" height="720"/>
-  <object id="2" name="solid" x="-9.26316" y="668.632" width="727.579" height="50.5263"/>
-  <object id="3" name="solid" x="-5.05265" y="-1.68421" width="725.053" height="53.8947"/>
-  <object id="4" name="solid" x="665.263" y="-2.10526e-06" width="53.8947" height="720"/>
   <object id="39" name="solid" x="100.211" y="261.053" width="58.9474" height="53.8947"/>
   <object id="40" name="solid" x="213.895" y="180.211" width="24.4211" height="27.7895"/>
   <object id="41" name="solid" x="326.737" y="307.368" width="20.2105" height="28.6316"/>
@@ -2054,10 +2050,22 @@
   <object id="55" name="solid" x="580.211" y="323.368" width="25.2632" height="21.8947"/>
   <object id="56" name="solid" x="559.158" y="563.368" width="29.4737" height="29.4737"/>
   <object id="57" name="solid" x="264.421" y="483.368" width="50.5263" height="53.0526"/>
-  <object id="62" name="ddoor" x="338.947" y="664.804" width="37.8947" height="66.6029"/>
-  <object id="63" name="ldoor" x="0.516724" y="333.11" width="54.5455" height="32.7273"/>
-  <object id="64" name="rdoor" x="657.321" y="335.081" width="57.9904" height="32.1531"/>
-  <object id="65" name="udoor" x="342.105" y="2.20098" width="31.5789" height="54.5454"/>
+  <object id="62" name="ddoor" x="333.894" y="670.699" width="37.8947" height="29.5503"/>
+  <object id="63" name="ldoor" x="19.043" y="330.584" width="34.335" height="32.7273"/>
+  <object id="64" name="rdoor" x="671.637" y="338.449" width="36.0957" height="32.1531"/>
+  <object id="65" name="udoor" x="342.947" y="13.9905" width="31.5789" height="35.177"/>
+  <object id="67" name="solid" x="1.68421" y="1.68421" width="52.2105" height="294.737"/>
+  <object id="68" name="solid" x="1.68421" y="3.36842" width="310.737" height="46.3158"/>
+  <object id="69" name="solid" x="402.526" y="1.68421" width="318.316" height="47.1579"/>
+  <object id="70" name="solid" x="670.316" y="48" width="49.6842" height="250.105"/>
+  <object id="71" name="solid" x="670.316" y="407.579" width="49.6842" height="310.737"/>
+  <object id="72" name="solid" x="411.789" y="671.158" width="257.684" height="48"/>
+  <object id="73" name="solid" x="0.842105" y="669.474" width="295.579" height="48.8421"/>
+  <object id="74" name="solid" x="0.842105" y="394.947" width="50.5263" height="273.684"/>
+  <object id="75" name="solid" x="-2.52632" y="292.211" width="7.57895" height="109.474"/>
+  <object id="76" name="solid" x="308.211" y="-2.52632" width="107.789" height="5.89474"/>
+  <object id="77" name="solid" x="720" y="293.895" width="2.52632" height="126.316"/>
+  <object id="79" name="solid" x="289.684" y="717.474" width="128" height="1.68421"/>
  </objectgroup>
  <layer id="3" name="Tile Layer 2" width="45" height="45">
   <data>
