@@ -33,7 +33,7 @@ public:
 
     Tear(Player pl, sf::Event event);
     Tear();
-    int turn(list<Zombie> &Zombies);
+    int turn(list<Zombie> &Zombies, float delta_time);
     Vector2D getCoord();
     sf::Sprite getSprite();
     void death();

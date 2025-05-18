@@ -125,17 +125,16 @@ Player::Player(int hp, float max_speed, float Damage, float TearsFreq, float Ran
     
 }
 
-void Player::MoveInertion(sf::Event event, vector<Room*>& rooms) // что просходит с игроком в каждом кадре
+void Player::MoveInertion(sf::Event event, vector<Room*>& rooms, float time) // что просходит с игроком в каждом кадре
 {
     for(auto spr : this->BodyAnimationSprites) spr.setPosition(this->coord.x + 3600, this->coord.y + 3600); // спрайты анимации "ходят за Айзеком"
 
-    float time = 1;
     //cout << "Player's turn" << endl;
     Vector2D dV = {0,0};
     Vector2D null_vect = {0,0};
 
-    float time_from_shooting = this->tears_time.getElapsedTime().asSeconds();
-    int BodyAnimationTime = this->body_time.getElapsedTime().asMilliseconds();
+    float time_from_shooting = (float)this->tears_time.getElapsedTime().asMilliseconds()/1000;
+    int BodyAnimationTime = (float)this->body_time.getElapsedTime().asMicroseconds()/1000;
 
 
     if (sf::Keyboard::isKeyPressed(sf::Keyboard::A)) 
@@ -190,8 +189,8 @@ void Player::MoveInertion(sf::Event event, vector<Room*>& rooms) // что пр�
     }
 
 
-    if (dV.x == 0) velocity.x = velocity.x * 0.9; // т.е. в случае если мы ничего не нажимаем (персонаж должен сам затормозить)
-    if (dV.y == 0) velocity.y = velocity.y * 0.9; // коэфициент подобран опытным путем
+    if (dV.x == 0) velocity.x = velocity.x * 0.8; // т.е. в случае если мы ничего не нажимаем (персонаж должен сам затормозить)
+    if (dV.y == 0) velocity.y = velocity.y * 0.8; // коэфициент подобран опытным путем
     
     if(dV == null_vect) this->body_time.restart(); // пока Айзек не ходит - таймер анимации на нуле
 
@@ -259,7 +258,7 @@ void Player::MoveInertion(sf::Event event, vector<Room*>& rooms) // что пр�
 
 void Player::shoot(sf::Event event, list<Tear>& Tears)
 {
-    float time_from_shooting = this->tears_time.getElapsedTime().asSeconds();
+    float time_from_shooting = (float)this->tears_time.getElapsedTime().asMilliseconds()/1000;
     
     if(time_from_shooting > 1/(3*this->TearsFreq) )
     {
@@ -278,7 +277,7 @@ void Player::shoot(sf::Event event, list<Tear>& Tears)
         if( sf::Keyboard::isKeyPressed(sf::Keyboard::Right)) {HeadSprite.setTextureRect(sf::IntRect(96,0,32,32)); HeadDirection = "Right";} // анимация где голова чуток уменьшается
         if( sf::Keyboard::isKeyPressed(sf::Keyboard::Down)) {HeadSprite.setTextureRect(sf::IntRect(32,0,32,32)); HeadDirection = "Down";}
         if( sf::Keyboard::isKeyPressed(sf::Keyboard::Up)) {HeadSprite.setTextureRect(sf::IntRect(160,0,32,32)); HeadDirection = "Up";}
-
+        
         this->tears_time.restart();
         Tear T(*this, event); // тут у слезы есть спрайт, но при переносе в Tears он пропадает
         Tears.push_back(T); // пока что в main.cpp стоит костыль 
@@ -286,10 +285,10 @@ void Player::shoot(sf::Event event, list<Tear>& Tears)
 
 } 
 
-void Player::turn(sf::Event event, bool EnableInertion, list<Tear>& Tears, vector<Room*>& rooms)
+void Player::turn(sf::Event event, bool EnableInertion, list<Tear>& Tears, vector<Room*>& rooms, float time)
 {   
-    float time_from_shooting = this->tears_time.getElapsedTime().asSeconds();
-    float time_from_damage = this->damage_time.getElapsedTime().asSeconds();
+    float time_from_shooting = (float)this->tears_time.getElapsedTime().asMilliseconds()/1000;
+    float time_from_damage = (float)this->damage_time.getElapsedTime().asMilliseconds()/1000;
 
     this->BodySprite = this->BodyAnimationSprites[2];
     this->BodySprite.setPosition({this->coord.x - 16, this->coord.y + 20 - 32} ); 
@@ -309,18 +308,23 @@ void Player::turn(sf::Event event, bool EnableInertion, list<Tear>& Tears, vecto
     //HeadDirection = "Down";
     BodyDirection = "Down";
 
-    MoveInertion(event, rooms);
+    MoveInertion(event, rooms, time);
 
-    if (event.type == sf::Event::KeyPressed)
-    {
+    //if (event.type == sf::Event::KeyPressed)
+    //{
         if( sf::Keyboard::isKeyPressed(sf::Keyboard::Left) ||
             sf::Keyboard::isKeyPressed(sf::Keyboard::Right) ||
             sf::Keyboard::isKeyPressed(sf::Keyboard::Down) ||
             sf::Keyboard::isKeyPressed(sf::Keyboard::Up) )
         {
             shoot(event, Tears);
+            //cout << "Shoot\n";    
         } 
-    } 
+        //cout << "event.type == sf::Event::KeyPressed\n";
+        
+        
+    //} 
+    //if(sf::Keyboard::isKeyPressed(sf::Keyboard::Left)) cout << "sf::Keyboard::isKeyPressed(sf::Keyboard::Left)\n";
 
     if(this->GettingItem) // 160 432 64 64
     {
@@ -349,7 +353,7 @@ void Player::death()
 
 void Player::getDamage(int D)
 {
-    float time_from_damage = this->damage_time.getElapsedTime().asSeconds();
+    float time_from_damage = (float)this->damage_time.getElapsedTime().asMilliseconds()/1000;
     if (time_from_damage > this->time_invicibility)
     {
         this->damage_time.restart();

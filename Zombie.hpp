@@ -33,8 +33,8 @@ public:
     Zombie(int hp, float speed, Vector2D coord, int roomId);
 
 
-    void MoveInertion(Player& pl, vector<Room*>& rooms);
-    int turn(Player& pl, list<Zombie>& Zombies, vector<Room*>& rooms);
+    void MoveInertion(Player& pl, vector<Room*>& rooms, float delta_time);
+    int turn(Player& pl, list<Zombie>& Zombies, vector<Room*>& rooms, float delta_time);
     void getDamage(Tear& t);
     void death();
 

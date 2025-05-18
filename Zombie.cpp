@@ -31,7 +31,7 @@ Zombie::Zombie(int hp, float max_speed, Vector2D coord, int rmId)
     this->BodySprite.setTextureRect(sf::IntRect(0,32,32,32));
     this->HeadSprite.setScale(SizeX/20,SizeY/20);
 
-    sf::Sprite temp; 
+    sf::Sprite temp;
     temp.setTexture(ZombieTexture);
     temp.setPosition(this->coord.x, this->coord.y);
     temp.scale(SizeX/20,SizeY/20); 
@@ -65,9 +65,8 @@ Zombie::Zombie(int hp, float max_speed, Vector2D coord, int rmId)
 
 
 
-void Zombie::MoveInertion(Player &pl, vector<Room*>& rooms)
+void Zombie::MoveInertion(Player &pl, vector<Room*>& rooms, float delta_time)
 {
-    float time = 1;
     this->dV = {0,0};
     //cout << "Zombie's turn" << endl;
     Vector2D vect_to_player = this->coord - pl.coord;
@@ -78,7 +77,7 @@ void Zombie::MoveInertion(Player &pl, vector<Room*>& rooms)
 
     //cout << "vect_to_player = " << vect_to_player.x << " " << vect_to_player.y << endl; 
 
-    if (Abs_vect_to_player != 0)  this->dV = -acceleration/Abs_vect_to_player * vect_to_player;
+    if (Abs_vect_to_player != 0)  this->dV = -acceleration * delta_time/Abs_vect_to_player * vect_to_player;
     velocity = velocity + this->dV;
     if(velocity.ModuleQuadr() > this->max_speed * max_speed)
     {
@@ -117,7 +116,7 @@ void Zombie::MoveInertion(Player &pl, vector<Room*>& rooms)
         BodyDirection = "Up";
     }
 
-    this->coord.x = this->coord.x + this->velocity.x * time;
+    this->coord.x = this->coord.x + this->velocity.x * delta_time;
     this->heatbox.left = this->coord.x - (int)(SizeX * 0.5);
     
     int trig = 0;
@@ -133,7 +132,7 @@ void Zombie::MoveInertion(Player &pl, vector<Room*>& rooms)
                 {
                     if( this->heatbox.intersects(ObjectPointer->getRect()))
                     {
-                        this->coord.x = this->coord.x - this->velocity.x * time;
+                        this->coord.x = this->coord.x - this->velocity.x * delta_time;
                         this->velocity.x = 0;
                         this->heatbox.left = this->coord.x - (int)(SizeX * 0.5);
                         trig = 1;
@@ -145,7 +144,7 @@ void Zombie::MoveInertion(Player &pl, vector<Room*>& rooms)
     }
 
 
-    this->coord.y = this->coord.y + this->velocity.y * time;
+    this->coord.y = this->coord.y + this->velocity.y * delta_time;
     this->heatbox.top = this->coord.y - (int)(SizeY * 0.5);
 
     trig = 0;
@@ -160,7 +159,7 @@ void Zombie::MoveInertion(Player &pl, vector<Room*>& rooms)
                 {
                     if( this->heatbox.intersects(ObjectPointer->getRect()) ) // 600х600 это пока что костыль
                     {
-                        this->coord.y = this->coord.y - this->velocity.y * time;
+                        this->coord.y = this->coord.y - this->velocity.y * delta_time;
                         this->velocity.y = 0;
                         this->heatbox.top = this->coord.y - (int)(SizeY * 0.5);
                         trig = 1;
@@ -179,7 +178,7 @@ void Zombie::MoveInertion(Player &pl, vector<Room*>& rooms)
 }
 
 
-int Zombie::turn(Player& pl, list<Zombie>& Zombies, vector<Room*>& rooms)
+int Zombie::turn(Player& pl, list<Zombie>& Zombies, vector<Room*>& rooms, float delta_time)
 {
     if(this->getHealth() <= 0)
     {
@@ -187,7 +186,7 @@ int Zombie::turn(Player& pl, list<Zombie>& Zombies, vector<Room*>& rooms)
     }
     else
     {
-        MoveInertion(pl, rooms);
+        MoveInertion(pl, rooms, delta_time);
         for(auto it = Zombies.begin(); it != Zombies.end(); it++)
         {
             if ( (this->coord - it->coord).ModuleQuadr() < 1000)

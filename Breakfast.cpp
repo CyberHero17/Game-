@@ -7,8 +7,8 @@ Breakfast::Breakfast(Vector2D coord)
     BreakfastTexture.loadFromFile("Textures/Breakfast.png");
     this->coord = coord;
 
-    PedestalSprite.setTexture(PedestalTexture); PedestalSprite.setPosition(coord.x - 24 + 16, coord.y - 16 + 16);
-    ItemSprite.setTexture(BreakfastTexture); ItemSprite.setPosition(coord.x - 14,coord.y - 48);
+    PedestalSprite.setTexture(PedestalTexture); PedestalSprite.setPosition(coord.x - 24, coord.y - 16);
+    ItemSprite.setTexture(BreakfastTexture); ItemSprite.setPosition(coord.x - 14 - 16,coord.y - 48 -16);
     
     id = 1;
     name = "Breakfast";
@@ -46,7 +46,7 @@ void Breakfast::draw(sf::RenderWindow &window)
 void Breakfast::turn(Player &pl)
 {
     float time = this->AnimationTime.getElapsedTime().asMilliseconds() * 0.003;
-    ItemSprite.setPosition(coord.x - (int)(pl.SizeX * 0.5), coord.y - (int)(pl.SizeY * 1.5) + 10 * sin(time) ); // движение вверх-вниз
+    ItemSprite.setPosition(coord.x - (int)(pl.SizeX * 0.5) - 14, coord.y - 16 - (int)(pl.SizeY * 1.5) + 10 * sin(time) ); // движение вверх-вниз
     Vector2D vect_to_pl = pl.coord - this->coord;
     if(not ispicked)
     {

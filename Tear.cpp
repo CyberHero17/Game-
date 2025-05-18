@@ -32,52 +32,43 @@ Tear::Tear(Player pl, sf::Event event)
     Animation = 0;
     this->time.restart();
     
-    
-    
     this->texture.loadFromFile("Textures/Tear.png");
     this->sprite.setTexture(this->texture);
     
-    
-    
-    if (event.type == sf::Event::KeyPressed)
+    if (    sf::Keyboard::isKeyPressed(sf::Keyboard::Left)) 
     {
-        if (     sf::Keyboard::isKeyPressed(sf::Keyboard::Left)) 
-        {
-            velocity = {-ShotSpeed, 0};
-            this->coord = {pl.coord.x - (int)(pl.SizeX * 0.4), pl.coord.y - (int)(pl.SizeY * 0.6)};
-        }
-        else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right)) 
-        {
-            velocity = {ShotSpeed, 0};
-            this->coord = {pl.coord.x + (int)(pl.SizeX * 0.4), pl.coord.y - (int)(pl.SizeY * 0.6)};
-        }
-        else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Down)) 
-        {
-            velocity = {0, ShotSpeed};
-            this->coord = {pl.coord.x - (int)(pl.SizeX * 0.35), pl.coord.y - (int)(pl.SizeY * 0.6)};
-        }
-        else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up)) 
-        {
-            velocity = {0, -ShotSpeed};
-            this->coord = {pl.coord.x - (int)(pl.SizeX * 0.35), pl.coord.y - (int)(pl.SizeY * 0.6)};
-        }
-
-        else
-        {
-            cout << "Button wasn't pressed\n";
-            velocity = {ShotSpeed, 0};
-        }
+        velocity = {-ShotSpeed, 0};
+        this->coord = {pl.coord.x - (int)(pl.SizeX * 0.4), pl.coord.y - (int)(pl.SizeY * 0.6)};
     }
-
-
+    else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right)) 
+    {
+        velocity = {ShotSpeed, 0};
+        this->coord = {pl.coord.x + (int)(pl.SizeX * 0.4), pl.coord.y - (int)(pl.SizeY * 0.6)};
+    }
+    else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Down)) 
+    {
+        velocity = {0, ShotSpeed};
+        this->coord = {pl.coord.x - (int)(pl.SizeX * 0.35), pl.coord.y - (int)(pl.SizeY * 0.6)};
+    }
+    else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up)) 
+    {
+        velocity = {0, -ShotSpeed};
+        this->coord = {pl.coord.x - (int)(pl.SizeX * 0.35), pl.coord.y - (int)(pl.SizeY * 0.6)};
+    }
+    else
+    {
+        cout << "Button wasn't pressed\n";
+        velocity = {ShotSpeed, 0};
+        this->coord = {pl.coord.x + (int)(pl.SizeX * 0.4), pl.coord.y - (int)(pl.SizeY * 0.6)};
+    }
 }
 
-int Tear::turn(list<Zombie> &Zombies)
+int Tear::turn(list<Zombie> &Zombies, float delta_time)
 {
     if(not Animation)
     {
-        this->coord.x = this->coord.x + this->velocity.x;
-        this->coord.y = this->coord.y + this->velocity.y;
+        this->coord.x = this->coord.x + this->velocity.x * delta_time;
+        this->coord.y = this->coord.y + this->velocity.y * delta_time;
         float time_of_living = time.getElapsedTime().asSeconds();
         if( time_of_living > this->Range/this->ShotSpeed)
         {
