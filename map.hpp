@@ -61,14 +61,16 @@ public:
     void CreateRoom(Room* ptrr, float x, float y);                      // Создание комнаты с таким айдишником (Это основная функция)
     bool CreateObjects();                                               // x, y - начальные координаты комнаты. Ставим объекты, но не отрисовываем их 
     void Teleport(Player& p);
-    bool PlaceDoors();                                                  // Расставляем картинки дверей 
-    
+    bool PlaceDoors(std::string ls);                                                  // Расставляем картинки дверей 
+    //bool DelExtraDr(std::string ls);
+
     // гетеры, сетеры
     std::vector<Object*>& getObj(); // вектор obj
     //std::vector<Door>& getDoors(); // вектор doors
     void LoadTextureFromFile(std::string filename);
     void setSpriteTexture();
     std::vector<sf::Sprite>& getLayers();
+
 
     int getWidth();
     int getHeight();

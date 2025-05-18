@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.10" tiledversion="1.11.1-99-gec89c545" orientation="orthogonal" renderorder="right-down" width="45" height="30" tilewidth="16" tileheight="16" infinite="0" nextlayerid="4" nextobjectid="39">
+<map version="1.10" tiledversion="1.11.1-99-gec89c545" orientation="orthogonal" renderorder="right-down" width="45" height="30" tilewidth="16" tileheight="16" infinite="0" nextlayerid="4" nextobjectid="54">
  <tileset firstgid="1" source="cellar.tsx"/>
  <tileset firstgid="2" source="rocks_cellar.tsx"/>
  <layer id="1" name="Picture" width="45" height="30">
@@ -2367,7 +2367,7 @@
    <tile/>
    <tile/>
    <tile/>
-   <tile gid="13"/>
+   <tile/>
    <tile/>
    <tile/>
    <tile/>
@@ -2711,32 +2711,39 @@
   </data>
  </layer>
  <objectgroup id="3" name="solid">
-  <object id="1" name="solid" x="0.574163" y="-0.574163" width="718.852" height="70.622"/>
-  <object id="2" name="solid" x="-1.14833" y="-1.14833" width="79.8086" height="482.871"/>
-  <object id="3" name="solid" x="2.82297e-05" y="403.062" width="718.852" height="75.2153"/>
-  <object id="4" name="solid" x="640.766" y="-4.01914" width="80.3828" height="484.593"/>
-  <object id="5" name="solid" x="82.1053" y="71.1962" width="25.8373" height="67.7512"/>
+  <object id="5" name="solid" x="82.1053" y="79.2345" width="22.9665" height="55.1196"/>
   <object id="6" name="solid" x="108.517" y="109.665" width="32.7273" height="13.2057"/>
-  <object id="7" name="solid" x="109.091" y="71.1962" width="49.378" height="36.7464"/>
-  <object id="8" name="solid" x="610.335" y="80.3828" width="28.7081" height="28.134"/>
-  <object id="9" name="solid" x="292.249" y="180.287" width="22.3923" height="21.8182"/>
-  <object id="10" name="solid" x="404.211" y="183.158" width="24.1148" height="22.3923"/>
-  <object id="11" name="solid" x="419.713" y="240.574" width="24.1148" height="27.5598"/>
-  <object id="12" name="solid" x="485.742" y="262.392" width="23.5407" height="21.244"/>
-  <object id="13" name="solid" x="517.895" y="246.316" width="20.6699" height="20.0957"/>
-  <object id="14" name="solid" x="578.756" y="370.335" width="60.2871" height="36.1722"/>
-  <object id="16" name="solid" x="610.909" y="340.478" width="29.2823" height="29.8565"/>
-  <object id="17" name="solid" x="306.603" y="341.053" width="25.8373" height="22.9665"/>
+  <object id="7" name="solid" x="109.091" y="80.957" width="41.3397" height="20.6698"/>
+  <object id="8" name="solid" x="614.354" y="80.3828" width="24.689" height="22.3924"/>
+  <object id="9" name="solid" x="294.666" y="186.029" width="14.4475" height="13.2969"/>
+  <object id="10" name="solid" x="404.798" y="183.17" width="16.7514" height="14.4475"/>
+  <object id="11" name="solid" x="427.829" y="252.91" width="13.292" height="10.9786"/>
+  <object id="12" name="solid" x="486.67" y="262.735" width="14.4524" height="12.7203"/>
+  <object id="13" name="solid" x="524.124" y="246.592" width="15.5887" height="13.8638"/>
+  <object id="14" name="solid" x="583.924" y="372.632" width="53.3971" height="30.4306"/>
+  <object id="16" name="solid" x="613.78" y="342.775" width="26.4115" height="27.5598"/>
   <object id="18" name="solid" x="148.134" y="342.775" width="24.689" height="21.244"/>
-  <object id="19" name="solid" x="83.8278" y="372.632" width="29.2823" height="34.4498"/>
-  <object id="20" name="solid" x="337.033" y="188.9" width="25.2632" height="45.3589"/>
-  <object id="21" name="solid" x="320.957" y="199.809" width="27.5598" height="66.6029"/>
-  <object id="22" name="solid" x="288.804" y="231.962" width="59.7129" height="34.4498"/>
-  <object id="23" name="solid" x="258.373" y="223.349" width="27.5598" height="35.0239"/>
-  <object id="28" x="213.589" y="172.249" width="0.574163" height="1.14833"/>
-  <object id="34" name="ldoor" x="28.9952" y="224.211" width="54.5455" height="32.7273"/>
-  <object id="36" name="ddoor" x="341.627" y="396.172" width="37.8947" height="66.6029"/>
-  <object id="37" name="rdoor" x="636.459" y="224.785" width="57.9904" height="37.3206"/>
-  <object id="38" name="udoor" x="352.249" y="27.2727" width="31.5789" height="54.5454"/>
+  <object id="19" name="solid" x="83.8278" y="372.632" width="21.244" height="24.1149"/>
+  <object id="20" name="solid" x="337.34" y="188.936" width="25.3687" height="45.5483"/>
+  <object id="21" name="solid" x="320.886" y="199.891" width="27.4088" height="61.0488"/>
+  <object id="22" name="solid" x="291.216" y="231.867" width="57.0794" height="28.4954"/>
+  <object id="23" name="solid" x="263.54" y="228.717" width="22.4858" height="25.3686"/>
+  <object id="28" name="solid" x="213.589" y="172.249" width="0.574163" height="1.14833"/>
+  <object id="34" name="ldoor" x="47.6459" y="219.433" width="30.5263" height="32.7273"/>
+  <object id="36" name="ddoor" x="340.96" y="400.839" width="37.8947" height="48.8039"/>
+  <object id="37" name="rdoor" x="641.18" y="221.914" width="48.6762" height="37.3206"/>
+  <object id="38" name="udoor" x="351.49" y="41.4226" width="31.5789" height="35.933"/>
+  <object id="40" name="solid" x="54.5455" y="9.1866" width="267.56" height="67.177"/>
+  <object id="41" name="solid" x="415.693" y="10.3349" width="249.187" height="68.3254"/>
+  <object id="42" name="solid" x="637.321" y="51.1005" width="59.7129" height="148.134"/>
+  <object id="44" name="solid" x="639.617" y="283.062" width="57.9904" height="132.057"/>
+  <object id="45" name="solid" x="400.766" y="400.766" width="235.981" height="69.4737"/>
+  <object id="47" name="solid" x="79.2344" y="399.617" width="241.148" height="69.4737"/>
+  <object id="48" name="solid" x="7.46411" y="75.7895" width="70.622" height="117.129"/>
+  <object id="49" name="solid" x="9.76077" y="276.172" width="68.3254" height="142.392"/>
+  <object id="50" name="solid" x="-1.96172" y="194.826" width="14.9282" height="80.9569"/>
+  <object id="51" x="691.866" y="199.809" width="8.61244" height="82.6794"/>
+  <object id="52" name="solid" x="320.957" y="463.349" width="80.9569" height="9.76077"/>
+  <object id="53" name="solid" x="330.44" y="-1.29505" width="71.1962" height="13.7799"/>
  </objectgroup>
 </map>

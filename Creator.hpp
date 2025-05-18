@@ -158,7 +158,7 @@ void Room::Teleport(Player& p){
     if(p.Teletime.getElapsedTime().asSeconds() < 1){
         return;
     }
-    sf::FloatRect prect = sf::FloatRect(p.coord.x + 8, p.coord.y+16, 16.0f, 16.0f);
+    sf::FloatRect prect = sf::FloatRect(p.coord.x, p.coord.y + 8.0f, 16.0f, 16.0f);
     int id = p.roomId;
 
     for(auto obj : this->getObj()){
@@ -168,10 +168,10 @@ void Room::Teleport(Player& p){
             if(obj->CheckCollision(prect) && nexus[id][ind] != '#'){
                 
                 char dest = nexus[id][ind];
-                //std::cout << "====" <<dest;
+                std::cout << "====" << dest << '\n';
                 Room* rm = FindRm(dest-48);
                 Object d = FindDr(rm, obj->getName()[0]);
-                p.coord = {d.getX(), d.getY()};
+                p.coord = {d.getX() + 10, d.getY() + 10};
                 p.roomId = dest-48; 
                 p.Teletime.restart();  
                 return;

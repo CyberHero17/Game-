@@ -42,10 +42,13 @@ int main()
 
     Fill(vm);
     PlaceRooms(vm, X0, Y0);
+    
     makeNumOfRooms(vm);
     Place(vm);
     ConnectRm(vm);
-
+    for(auto& r : rooms){
+        r->PlaceDoors(nexus[r->getRoomId()]);
+    };
     //Door d1(std::move("Textures/Door.png"));
     // for(auto& r : rooms){
     //     r->PlaceDoors();
