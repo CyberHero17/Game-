@@ -6,9 +6,9 @@
 Zombie::Zombie(int hp, float max_speed, Vector2D coord, int rmId)
 {
     this->roomId = rmId;
-    SizeX = 32;
-    SizeY = 32;
-    this->heatbox.width = SizeX * 1.1;
+    SizeX = 24;
+    SizeY = 24;
+    this->heatbox.width = SizeX * 1;
     this->heatbox.height = SizeY * 1.4;
 
     dV = {0,0};

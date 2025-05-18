@@ -16,8 +16,8 @@ Room* FindRmMaxim(int id, std::vector<Room*> rooms){
 
 Player::Player(int hp, float max_speed, float Damage, float TearsFreq, float Range, float ShotSpeed, float Luck, float TearMass)
 {
-    SizeX = 32;
-    SizeY = 32;
+    SizeX = 24;
+    SizeY = 24;
     this->heatbox.width = SizeX * 1.1;
     this->heatbox.height = SizeY * 1.4;
     
