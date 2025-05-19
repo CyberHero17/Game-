@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.10" tiledversion="1.11.1-99-gec89c545" orientation="orthogonal" renderorder="right-down" width="45" height="30" tilewidth="16" tileheight="16" infinite="0" nextlayerid="4" nextobjectid="78">
+<map version="1.10" tiledversion="1.11.1-99-gec89c545" orientation="orthogonal" renderorder="right-down" width="45" height="30" tilewidth="16" tileheight="16" infinite="0" nextlayerid="4" nextobjectid="85">
  <tileset firstgid="1" source="cellar.tsx"/>
  <tileset firstgid="2" source="rocks_cellar.tsx"/>
  <layer id="1" name="Picture" width="45" height="30">
@@ -1750,6 +1750,13 @@
    <tile/>
    <tile/>
    <tile/>
+   <tile gid="17"/>
+   <tile/>
+   <tile/>
+   <tile/>
+   <tile gid="17"/>
+   <tile gid="17"/>
+   <tile gid="17"/>
    <tile/>
    <tile/>
    <tile/>
@@ -1788,21 +1795,14 @@
    <tile/>
    <tile/>
    <tile/>
+   <tile gid="17"/>
    <tile/>
    <tile/>
+   <tile gid="17"/>
    <tile/>
    <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile gid="9"/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
+   <tile gid="17"/>
+   <tile gid="17"/>
    <tile/>
    <tile/>
    <tile/>
@@ -1837,18 +1837,18 @@
    <tile gid="14"/>
    <tile/>
    <tile gid="15"/>
+   <tile gid="17"/>
+   <tile gid="17"/>
+   <tile gid="17"/>
+   <tile gid="17"/>
+   <tile gid="17"/>
+   <tile gid="17"/>
    <tile/>
    <tile/>
    <tile/>
    <tile/>
    <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
+   <tile gid="17"/>
    <tile/>
    <tile/>
    <tile/>
@@ -1882,18 +1882,18 @@
    <tile/>
    <tile/>
    <tile/>
+   <tile gid="17"/>
+   <tile/>
+   <tile gid="17"/>
+   <tile/>
+   <tile gid="17"/>
+   <tile gid="17"/>
    <tile/>
    <tile/>
    <tile/>
    <tile/>
    <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
+   <tile gid="17"/>
    <tile/>
    <tile/>
    <tile/>
@@ -1926,19 +1926,19 @@
    <tile gid="19"/>
    <tile gid="18"/>
    <tile/>
-   <tile gid="19"/>
+   <tile gid="17"/>
+   <tile/>
+   <tile/>
+   <tile gid="17"/>
+   <tile/>
+   <tile gid="17"/>
+   <tile/>
+   <tile gid="17"/>
    <tile/>
    <tile/>
    <tile/>
    <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
+   <tile gid="17"/>
    <tile/>
    <tile/>
    <tile/>
@@ -1970,14 +1970,20 @@
    <tile/>
    <tile/>
    <tile/>
+   <tile gid="17"/>
    <tile/>
    <tile/>
    <tile/>
+   <tile gid="17"/>
    <tile/>
+   <tile gid="17"/>
    <tile/>
+   <tile gid="17"/>
    <tile/>
    <tile/>
    <tile/>
+   <tile gid="17"/>
+   <tile gid="17"/>
    <tile/>
    <tile/>
    <tile/>
@@ -2009,13 +2015,19 @@
    <tile/>
    <tile/>
    <tile/>
+   <tile gid="17"/>
    <tile/>
    <tile/>
    <tile/>
+   <tile gid="17"/>
    <tile/>
+   <tile gid="17"/>
    <tile/>
+   <tile gid="17"/>
    <tile/>
    <tile/>
+   <tile gid="17"/>
+   <tile gid="17"/>
    <tile/>
    <tile/>
    <tile/>
@@ -2047,12 +2059,19 @@
    <tile/>
    <tile/>
    <tile/>
+   <tile gid="17"/>
+   <tile gid="17"/>
    <tile/>
    <tile/>
    <tile/>
+   <tile gid="17"/>
    <tile/>
+   <tile gid="17"/>
    <tile/>
+   <tile gid="17"/>
    <tile/>
+   <tile gid="17"/>
+   <tile gid="17"/>
    <tile/>
    <tile/>
    <tile/>
@@ -2085,36 +2104,17 @@
    <tile/>
    <tile/>
    <tile/>
+   <tile gid="17"/>
+   <tile gid="17"/>
    <tile/>
    <tile/>
    <tile/>
+   <tile gid="17"/>
    <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
+   <tile gid="17"/>
+   <tile gid="17"/>
+   <tile gid="17"/>
+   <tile gid="17"/>
    <tile/>
    <tile/>
    <tile/>
@@ -2154,9 +2154,9 @@
    <tile gid="15"/>
    <tile/>
    <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
+   <tile gid="17"/>
+   <tile gid="17"/>
+   <tile gid="17"/>
    <tile/>
    <tile/>
    <tile/>
@@ -2739,5 +2739,12 @@
   <object id="75" name="solid" x="4.01914" y="191.196" width="10.335" height="88.9952"/>
   <object id="76" name="solid" x="699.33" y="182.584" width="11.4833" height="102.775"/>
   <object id="77" name="solid" x="331.292" y="463.349" width="83.2536" height="8.03828"/>
+  <object id="78" name="mob" x="352.536" y="230.813"/>
+  <object id="79" name="mob" x="453.014" y="233.684"/>
+  <object id="80" name="mob" x="521.914" y="293.971"/>
+  <object id="81" name="mob" x="239.426" y="242.297"/>
+  <object id="82" name="mob" x="160.766" y="303.158"/>
+  <object id="83" name="mob" x="544.306" y="191.196"/>
+  <object id="84" name="mob" x="559.234" y="148.134"/>
  </objectgroup>
 </map>

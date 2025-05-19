@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.10" tiledversion="1.11.1-99-gec89c545" orientation="orthogonal" renderorder="right-down" width="45" height="45" tilewidth="16" tileheight="16" infinite="0" nextlayerid="4" nextobjectid="58">
+<map version="1.10" tiledversion="1.11.1-99-gec89c545" orientation="orthogonal" renderorder="right-down" width="45" height="45" tilewidth="16" tileheight="16" infinite="0" nextlayerid="4" nextobjectid="75">
  <tileset firstgid="1" source="ashpit.tsx"/>
  <tileset firstgid="2" source="rocks_ashpit.tsx"/>
  <layer id="1" name="Picture" width="45" height="45">
@@ -2072,6 +2072,23 @@
   <object id="55" name="solid" x="714.947" y="298.105" width="6.73684" height="121.263"/>
   <object id="56" name="solid" x="-4.21053" y="288.842" width="11.7895" height="106.947"/>
   <object id="57" name="solid" x="293.895" y="717.474" width="115.368" height="1.68421"/>
+  <object id="58" name="mob" x="288" y="247.579"/>
+  <object id="59" name="mob" x="361.263" y="426.105"/>
+  <object id="60" name="mob" x="483.368" y="280.421"/>
+  <object id="61" name="mob" x="260.211" y="387.368"/>
+  <object id="62" name="mob" x="499.368" y="495.158"/>
+  <object id="63" name="mob" x="361.263" y="550.737"/>
+  <object id="64" name="mob" x="453.895" y="438.737"/>
+  <object id="65" name="mob" x="584.421" y="472.421"/>
+  <object id="66" name="mob" x="597.053" y="266.947"/>
+  <object id="67" name="mob" x="458.105" y="147.368"/>
+  <object id="68" name="mob" x="272" y="185.263"/>
+  <object id="69" name="mob" x="197.053" y="236.632"/>
+  <object id="70" name="mob" x="188.632" y="282.947"/>
+  <object id="71" name="mob" x="197.053" y="427.789"/>
+  <object id="72" name="mob" x="166.737" y="519.579"/>
+  <object id="73" name="mob" x="221.474" y="569.263"/>
+  <object id="74" name="mob" x="272.842" y="595.368"/>
  </objectgroup>
  <layer id="3" name="Tile Layer 2" width="45" height="45">
   <data>

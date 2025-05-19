@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.10" tiledversion="1.11.1-99-gec89c545" orientation="orthogonal" renderorder="right-down" width="45" height="45" tilewidth="16" tileheight="16" infinite="0" nextlayerid="4" nextobjectid="80">
+<map version="1.10" tiledversion="1.11.1-99-gec89c545" orientation="orthogonal" renderorder="right-down" width="45" height="45" tilewidth="16" tileheight="16" infinite="0" nextlayerid="4" nextobjectid="85">
  <tileset firstgid="1" source="ashpit.tsx"/>
  <tileset firstgid="2" source="rocks_ashpit.tsx"/>
  <layer id="1" name="Picture" width="45" height="45">
@@ -2066,6 +2066,11 @@
   <object id="76" name="solid" x="308.211" y="-2.52632" width="107.789" height="5.89474"/>
   <object id="77" name="solid" x="720" y="293.895" width="2.52632" height="126.316"/>
   <object id="79" name="solid" x="289.684" y="717.474" width="128" height="1.68421"/>
+  <object id="80" name="mob" x="432.842" y="456.421"/>
+  <object id="81" name="mob" x="394.105" y="509.474"/>
+  <object id="82" name="mob" x="238.316" y="421.053"/>
+  <object id="83" name="mob" x="272" y="283.789"/>
+  <object id="84" name="mob" x="474.947" y="189.474"/>
  </objectgroup>
  <layer id="3" name="Tile Layer 2" width="45" height="45">
   <data>

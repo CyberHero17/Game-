@@ -89,7 +89,6 @@ Room::Room(int ID){ // Пустая карта
     height = 0;
     id = ID;
     IWasHere = 0;
-    Zombie Z1(6, 0.2 * 5, {3700,3800}, 0); Zombies.push_back(Z1);
 }
 std::vector<Object*>& Room::getObj(){
     return obj;
@@ -138,15 +137,25 @@ bool Room::CreateObjects(){
     tinyxml2::XMLElement* o = og->FirstChildElement("object");
     //Считаем объекты 
     while(o){
-        float Xo = strtof(o->Attribute("x"), NULL) + this->X;
-        float Yo = strtof(o->Attribute("y"), NULL) + this->Y;
-        float WIDTH = strtof(o->Attribute("width"), NULL);
-        float HEIGHT = strtof(o->Attribute("height"), NULL);
-        
         std::string Name = "none";
         if(o->Attribute("name") != nullptr){
             Name = (std::string)(o->Attribute("name"));
         } 
+
+        float Xo = strtof(o->Attribute("x"), NULL) + this->X;
+        float Yo = strtof(o->Attribute("y"), NULL) + this->Y;
+        if(Name == "mob"){
+            this->Zombies.push_back(Zombie(6, 3, {Xo, Yo}, this->id));
+            o = o->NextSiblingElement("object");
+            continue;
+        }
+
+
+        
+        float WIDTH = strtof(o->Attribute("width"), NULL);
+        float HEIGHT = strtof(o->Attribute("height"), NULL);
+        
+        
         //std::cout << '{' << WIDTH << ' ' << HEIGHT << '}' << '\n';
         if(Name[0] != 's'){
             Object* item = new Door(std::move("Textures/Door.png"));
@@ -321,7 +330,8 @@ void Room::CreateRoom(Room* ptrr, float x, float y){
         }   
     // Всё, есть спрайты всех объектов на карте
     CreateObjects();
-    //PlaceDoors();
+    std::cout << '{'<< Zombies.size() <<  "}"  << '\n';
+
     std::cout << "Success ---->"<< id << '\n';
 };
 

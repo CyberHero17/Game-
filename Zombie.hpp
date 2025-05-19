@@ -30,7 +30,7 @@ public:
     sf::Clock body_time;
     vector<sf::Sprite> BodyAnimationSprites;
 
-    Zombie(int hp, float speed, Vector2D coord, int roomId);
+    Zombie(int hp, float speed, Vector2D coord, int roomId); // hp = 6, speed = 1
 
 
     void MoveInertion(Player& pl, vector<Room*>& rooms);

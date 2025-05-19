@@ -53,7 +53,6 @@ private:
     std::vector<Object*> obj;                                           // Все дополнительные элементы на карте
     std::vector<sf::Sprite> layers;                                     // Все дополнительные изображения
     std::list<Zombie> Zombies;                                        // Зомби в комнате, которых потом нужно заспавнить
-    
 public:
     bool IWasHere;
     Room(int ID);

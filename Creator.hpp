@@ -155,7 +155,7 @@ Object& FindDr(Room* r, char dr){
 };
 
 void Room::Teleport(Player& p){
-    if(p.Teletime.getElapsedTime().asSeconds() < 1){
+    if(p.Teletime.getElapsedTime().asSeconds() < 1 || this->getZombies().empty() == 0){
         return;
     }
     sf::FloatRect prect = sf::FloatRect(p.coord.x, p.coord.y + 8.0f, 16.0f, 16.0f);

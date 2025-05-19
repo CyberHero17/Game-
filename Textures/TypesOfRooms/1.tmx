@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.10" tiledversion="1.11.1-99-gec89c545" orientation="orthogonal" renderorder="right-down" width="45" height="30" tilewidth="16" tileheight="16" infinite="0" nextlayerid="4" nextobjectid="54">
+<map version="1.10" tiledversion="1.11.1-99-gec89c545" orientation="orthogonal" renderorder="right-down" width="45" height="30" tilewidth="16" tileheight="16" infinite="0" nextlayerid="4" nextobjectid="59">
  <tileset firstgid="1" source="cellar.tsx"/>
  <tileset firstgid="2" source="rocks_cellar.tsx"/>
  <layer id="1" name="Picture" width="45" height="30">
@@ -2728,7 +2728,6 @@
   <object id="21" name="solid" x="320.886" y="199.891" width="27.4088" height="61.0488"/>
   <object id="22" name="solid" x="291.216" y="231.867" width="57.0794" height="28.4954"/>
   <object id="23" name="solid" x="263.54" y="228.717" width="22.4858" height="25.3686"/>
-  <object id="28" name="solid" x="213.589" y="172.249" width="0.574163" height="1.14833"/>
   <object id="34" name="ldoor" x="47.6459" y="219.433" width="30.5263" height="32.7273"/>
   <object id="36" name="ddoor" x="340.96" y="400.839" width="37.8947" height="48.8039"/>
   <object id="37" name="rdoor" x="641.18" y="221.914" width="48.6762" height="37.3206"/>
@@ -2745,5 +2744,10 @@
   <object id="51" x="691.866" y="199.809" width="8.61244" height="82.6794"/>
   <object id="52" name="solid" x="320.957" y="463.349" width="80.9569" height="9.76077"/>
   <object id="53" name="solid" x="330.44" y="-1.29505" width="71.1962" height="13.7799"/>
+  <object id="54" name="mob" x="263" y="156"/>
+  <object id="55" name="mob" x="462" y="181.5"/>
+  <object id="56" name="mob" x="398" y="301.5"/>
+  <object id="57" name="mob" x="266" y="298.5"/>
+  <object id="58" name="mob" x="385.5" y="146.5"/>
  </objectgroup>
 </map>
