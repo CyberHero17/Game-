@@ -62,10 +62,10 @@ public:
     float SizeX, SizeY;
 
     Player(int hp, float max_speed, float Damage, float TearsFreq, float Range, float ShotSpeed, float Luck, float TearMass);
-    void MoveInertion(sf::Event event, vector<Room*>& rooms);
+    void MoveInertion(sf::Event event, vector<Room*>& rooms, float delta_time);
 
     void shoot(sf::Event event, list<Tear>& Tears);
-    void turn(sf::Event event, bool EnableIntertion, list<Tear>& Tears, vector<Room*>& rooms);
+    void turn(sf::Event event, bool EnableIntertion, list<Tear>& Tears, vector<Room*>& rooms, float time);
     void death();
     void getDamage(int D);
     void draw(sf::RenderWindow& window);

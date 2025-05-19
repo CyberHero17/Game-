@@ -27,9 +27,9 @@ int main()
 
     bool EnableInertion = 1;
     sf::RenderWindow window(sf::VideoMode(1000, 600), "The Pinging of the Isaac"); // с этой частью связана утечка приемрно в 259,467 байт
-    int delta_time = 5;
+    
 
-    Player Isaac(5, 0.8 * delta_time, 2, 3 , 5.0f, 5, 0, 2);
+    Player Isaac(5, 0.8 * 5, 2, 3 , 5.0f, 5, 0, 2);
 
     //Zombie Z1(6, 0.2 * delta_time, {3700,3800}, 0); Zombies.push_back(Z1);
     //Zombie Z2(6, 0.2 * delta_time, {3750,3800}); Zombies.push_back(Z2);
@@ -54,16 +54,20 @@ int main()
     //     r->PlaceDoors();
     // }
 
-    //window.setFramerateLimit(60);
-
+    window.setFramerateLimit(60);
+    sf::Clock WorldTime;
     while (window.isOpen())
     {
+        float delta_time = (float)(WorldTime.getElapsedTime().asMicroseconds()) /20000;
+        //cout << delta_time << endl;
+        WorldTime.restart();
+
         Room* RoomPointer = FindRm(Isaac.roomId);
         RoomPointer->IWasHere = 1;
 
 
         //sf:Clock WorldClock;
-        std::this_thread::sleep_for(std::chrono::milliseconds(delta_time));
+        //std::this_thread::sleep_for(std::chrono::milliseconds(5));
         
         sf::Event event;
         while (window.pollEvent(event))
@@ -78,7 +82,7 @@ int main()
         while(it_Monst != RoomPointer->getZombies().end())
         {
 
-            int WhatHappened = it_Monst->turn(Isaac, RoomPointer->getZombies(), rooms);
+            int WhatHappened = it_Monst->turn(Isaac, RoomPointer->getZombies(), rooms, delta_time);
             //if(count%100 == 0) cout << "Moved " << RoomPointer->getRoomId() << " zombie\n";
             //count++;
             if (WhatHappened == 1) // т.е. если с монстром ничего не произошло
@@ -96,17 +100,19 @@ int main()
         }
                                                                                             //cout << Isaac.roomId << endl;
         Br.turn(Isaac);
-        Isaac.turn(event, EnableInertion, Tears, rooms);
+        Isaac.turn(event, EnableInertion, Tears, rooms, delta_time);
         
 
         //cout << Br.PedestalSprite.getPosition().x << " " << Br.PedestalSprite.getPosition().y << endl;
         //cout << Isaac.heatbox.getPosition().x << " " << Isaac.heatbox.getPosition().y << endl;
 
         auto it_Tear = Tears.begin();
+        
         while(it_Tear != Tears.end()) // ход слез
         {
+            
             it_Tear->sprite.setTexture(it_Tear->texture); // почему у слез не установлен спрайт по умолчанию?
-            int WhatHappened = it_Tear->turn(RoomPointer->getZombies());
+            int WhatHappened = it_Tear->turn(RoomPointer->getZombies(), delta_time);
             if (WhatHappened == 1) // т.е. если слеза не врезаласась или уже уничтожена и просто проигрывает свою анимацию
             {
                 it_Tear++;
@@ -128,6 +134,7 @@ int main()
                 continue;
             }
         }
+        
 
 
         window.clear(); // пошла отрисовка
@@ -140,7 +147,7 @@ int main()
 
         window.setView(getCordsForView(Isaac.coord.x, Isaac.coord.y));
         
-
+        
 
         for(auto& z : RoomPointer->getZombies())
         {
@@ -150,19 +157,16 @@ int main()
             window.draw(z.HeadSprite);
         }
 
-        sf::Sprite testBombSprite;
+        /*sf::Sprite testBombSprite;
         testBombSprite.setTexture(BombTexture);
         testBombSprite.setPosition({4000, 4000});
-        window.draw(testBombSprite);
+        window.draw(testBombSprite); */
 
         
         Br.draw(window);
-        
-        for(auto it = Tears.begin(); it != Tears.end(); ++it)
-        {
-            window.draw(it->getSprite());
-        }
 
+        for(auto it = Tears.begin(); it != Tears.end(); ++it) window.draw(it->getSprite());
+        
         Isaac.draw(window);
         //-----------
         Isaac.CharacteristicsSprite.setPosition(Isaac.coord.x - 360.0f, Isaac.coord.y - 220.0f);    // движение характеристик
